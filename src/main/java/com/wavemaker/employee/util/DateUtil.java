@@ -10,8 +10,6 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class DateUtil {
-    private static final HolidayService holidayService = new HolidayServiceImpl();
-
     public static int calculateTotalDaysExcludingWeekendsAndHolidays(Date fromDate, Date toDate) throws ServerUnavilableException {
         LocalDate start = convertToLocalDate(fromDate);
         LocalDate end = convertToLocalDate(toDate);
