@@ -25,7 +25,8 @@ public class HolidayRepositoryImpl implements HolidayRepository {
 
     private static final String DATE_FROM_HOLIDAYS_QUERY = "SELECT HOLIDAY_DATE FROM HOLIDAYS";
 
-    private static final String SELECT_UPCOMING_HOLIDAY_LIST = "SELECT HOLIDAY_ID, NAME, HOLIDAY_DATE, DESCRIPTION FROM holidays WHERE HOLIDAY_DATE >= CURDATE()";
+    private static final String SELECT_UPCOMING_HOLIDAY_LIST = "SELECT HOLIDAY_ID, NAME, HOLIDAY_DATE, DESCRIPTION " +
+            "FROM holidays WHERE HOLIDAY_DATE >= CURDATE()";
 
 
     public HolidayRepositoryImpl() throws SQLException {

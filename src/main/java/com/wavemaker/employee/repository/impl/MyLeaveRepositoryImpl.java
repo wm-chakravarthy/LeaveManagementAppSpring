@@ -98,7 +98,6 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
     @Override
     public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavilableException {
         List<EmployeeLeaveRequestVO> leaveRequests = new ArrayList<>();
-        // Generate placeholders for the status list
         String placeholders = String.join(",", Collections.nCopies(statusList.size(), "?"));
         String query = String.format(GET_LEAVE_REQUESTS_BY_MULTIPLE_STATUSES, placeholders);
 
@@ -107,7 +106,6 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
             for (int i = 0; i < statusList.size(); i++) {
                 preparedStatement.setString(i + 2, statusList.get(i)); // Index starts from 2 as 1 is for empId
             }
-
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     EmployeeLeaveRequestVO leaveRequest = new EmployeeLeaveRequestVO();

@@ -9,9 +9,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.*;
 
 public class UserEntityRepositoryImpl implements UserEntityRepository {
-    private static final String SEARCH_USER = "SELECT * FROM EMPLOYEE_PASSWORD WHERE EMAIL_ID = ? AND PASSWORD = ?";
-    private static final String GET_USER_BY_ID_SQL = "SELECT EMPLOYEE_PASSWORD_ID, EMAIL_ID, PASSWORD FROM EMPLOYEE_PASSWORD WHERE EMP_ID = ?";
-    private static final String INSERT_QUERY = "INSERT INTO EMPLOYEE_PASSWORD (EMP_ID, EMAIL_ID, PASSWORD) VALUES (?, ?, ?)";
+
+    private static final String SEARCH_USER = "SELECT * FROM EMPLOYEE_PASSWORD " +
+            "WHERE EMAIL_ID = ? AND PASSWORD = ?";
+
+    private static final String GET_USER_BY_ID_SQL = "SELECT EMPLOYEE_PASSWORD_ID, EMAIL_ID, PASSWORD " +
+            "FROM EMPLOYEE_PASSWORD WHERE EMP_ID = ?";
+
+    private static final String INSERT_QUERY = "INSERT INTO EMPLOYEE_PASSWORD " +
+            "(EMP_ID, EMAIL_ID, PASSWORD) VALUES (?, ?, ?)";
 
     private static Connection connection;
 
@@ -81,7 +87,6 @@ public class UserEntityRepositoryImpl implements UserEntityRepository {
                 throw new ServerUnavilableException("Creating user failed, no rows affected.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
-            // Retrieve the auto-generated user ID
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if (resultSet.next()) {
                     userEntity.setUserId(resultSet.getInt(1)); // Assuming the ID generated is mapped to 'EMP_ID'

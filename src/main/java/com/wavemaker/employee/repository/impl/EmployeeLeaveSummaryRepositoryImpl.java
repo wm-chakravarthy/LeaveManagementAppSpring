@@ -18,18 +18,6 @@ import java.util.Map;
 
 public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryRepository {
 
-    private static final String FETCH_LEAVE_REQUESTS_QUERY =
-            "SELECT LEAVE_TYPE_ID, TOTAL_DAYS " +
-                    "FROM LEAVE_REQUEST " +
-                    "WHERE EMP_ID = ? AND LEAVE_STATUS = 'APPROVED'";
-
-    private static final String UPDATE_SUMMARY_QUERY =
-            "UPDATE EMPLOYEE_LEAVE_SUMMARY " +
-                    "SET TOTAL_LEAVES_TAKEN = ?, " +
-                    " PENDING_LEAVES = (SELECT MAX_LEAVE_DAYS_ALLOWED " +
-                    "FROM LEAVE_TYPE WHERE LEAVE_TYPE_ID = ?) - ? " +
-                    "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
-
     private static final String SQL_SELECT_EMPLOYEE_LEAVE_SUMMARY =
             "SELECT SUMMARY_ID, EMP_ID, LEAVE_TYPE_ID, LEAVE_TYPE, PENDING_LEAVES, TOTAL_LEAVES_TAKEN, LAST_UPDATED " +
                     "FROM employee_leave_summary " +

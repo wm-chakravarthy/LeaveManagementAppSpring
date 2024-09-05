@@ -50,7 +50,6 @@ public class LeaveTypeRepositoryImpl implements LeaveTypeRepository {
         } catch (SQLException e) {
             throw new ServerUnavilableException("Unable to retrieve leave type information", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
         return leaveTypes;
     }
 

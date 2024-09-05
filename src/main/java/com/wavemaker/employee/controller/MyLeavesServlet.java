@@ -46,6 +46,9 @@ public class MyLeavesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String statusParam = request.getParameter("status");
+        List<EmployeeLeaveRequestVO> employeeLeaveRequestVOList = null;
+        UserEntity userEntity = null;
+        String jsonResponse = null;
         List<String> statusList = new ArrayList<>();
         if (statusParam != null && !statusParam.isEmpty()) {
             statusList = Arrays.asList(statusParam.split(","));
@@ -56,9 +59,6 @@ public class MyLeavesServlet extends HttpServlet {
             statusList.add("CANCELLED");
         }
 
-        List<EmployeeLeaveRequestVO> employeeLeaveRequestVOList = null;
-        UserEntity userEntity = null;
-        String jsonResponse = null;
         try {
             userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
 

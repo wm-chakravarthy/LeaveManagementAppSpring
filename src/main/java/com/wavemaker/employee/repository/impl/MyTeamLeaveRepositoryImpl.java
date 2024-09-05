@@ -6,6 +6,8 @@ import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
 import com.wavemaker.employee.repository.MyTeamLeaveRepository;
 import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,11 +38,13 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
 
     private Connection connection;
 
+    private static final Logger logger = LoggerFactory.getLogger(MyTeamLeaveRepositoryImpl.class);
 
     public MyTeamLeaveRepositoryImpl() {
         try {
             connection = DBConnector.getConnectionInstance();
         } catch (SQLException e) {
+            logger.error("Exception", e);
         }
     }
 
@@ -54,16 +58,13 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
             queryBuilder.append(" AND lr.LEAVE_STATUS IN (").append(placeholders).append(")");
         }
 
-        // Append the ORDER BY clause
         queryBuilder.append(ORDER_BY_QUERY);
 
         String query = queryBuilder.toString();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            // Set the first parameter (empId)
             preparedStatement.setInt(1, empId);
 
-            // Set the parameters for statusList
             if (statusList != null && !statusList.isEmpty()) {
                 for (int i = 0; i < statusList.size(); i++) {
                     preparedStatement.setString(i + 2, statusList.get(i).toUpperCase());

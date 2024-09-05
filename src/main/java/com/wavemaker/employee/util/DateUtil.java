@@ -27,8 +27,24 @@ public class DateUtil {
             currentDate = currentDate.plusDays(1);
         }
 
-        return totalDays - holidayService.getUpcomingHolidayDatesList().size();
+        return totalDays;
     }
+
+//    private static int getTotalHolidays(LocalDate fromDate, LocalDate toDate) throws ServerUnavilableException {
+//        List<Date> dateList = holidayService.getUpcomingHolidayDatesList();
+//        int totalHolidays = 0;
+//
+//        for (Date holiday : dateList) {
+//            LocalDate holidayDate = convertToLocalDate(holiday);
+//
+//            if ((holidayDate.isEqual(fromDate) || holidayDate.isAfter(fromDate)) &&
+//                    (holidayDate.isEqual(toDate) || holidayDate.isBefore(toDate))) {
+//                totalHolidays++;
+//            }
+//        }
+//        return totalHolidays;
+//    }
+
 
     private static LocalDate convertToLocalDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

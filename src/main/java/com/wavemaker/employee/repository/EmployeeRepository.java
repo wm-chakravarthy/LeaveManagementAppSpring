@@ -9,14 +9,14 @@ import java.util.List;
 public interface EmployeeRepository {
     public EmployeeVO getEmployeeById(int empId) throws ServerUnavilableException;
 
-    public Employee addEmployee(Employee employee);
+    public Employee addEmployee(Employee employee) throws ServerUnavilableException;
 
-    public Employee updateEmployee(Employee employee);
+    public Employee updateEmployee(Employee employee) throws ServerUnavilableException;
 
-    public Employee deleteEmployee(int empId);
+    public Employee deleteEmployee(int empId) throws ServerUnavilableException;
 
-    public List<Employee> getEmployees();
+    public List<Employee> getEmployees() throws ServerUnavilableException;
 
-    public List<Employee> getAllManagers();
+    public List<Employee> getAllManagers() throws ServerUnavilableException;
 
 }

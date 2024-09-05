@@ -11,11 +11,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserCookieRepositoryImpl implements UserCookieRepository {
-    private static final String GET_EMPLOYEE_ID = "SELECT EMP_ID FROM EMPLOYEE_COOKIES WHERE COOKIE_VALUE = ?";
 
-    private static final String INSERT_COOKIE_SQL = "INSERT INTO EMPLOYEE_COOKIES (COOKIE_NAME, COOKIE_VALUE, EMP_ID) VALUES (?, ?, ?)";
+    private static final String GET_EMPLOYEE_ID = "SELECT EMP_ID FROM EMPLOYEE_COOKIES" +
+            " WHERE COOKIE_VALUE = ?";
 
-    private static final String DELETE_USER_COOKIE = "DELETE FROM EMPLOYEE_COOKIES WHERE COOKIE_VALUE = ?";
+    private static final String INSERT_COOKIE_SQL = "INSERT INTO EMPLOYEE_COOKIES " +
+            "(COOKIE_NAME, COOKIE_VALUE, EMP_ID) VALUES (?, ?, ?)";
+
+    private static final String DELETE_USER_COOKIE = "DELETE FROM EMPLOYEE_COOKIES " +
+            "WHERE COOKIE_VALUE = ?";
 
     private static Connection connection;
 

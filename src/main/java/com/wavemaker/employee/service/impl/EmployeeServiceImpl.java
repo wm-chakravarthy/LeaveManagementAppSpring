@@ -23,27 +23,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee addEmployee(Employee employee) {
+    public Employee addEmployee(Employee employee) throws ServerUnavilableException {
         return employeeRepository.addEmployee(employee);
     }
 
     @Override
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(Employee employee) throws ServerUnavilableException {
         return employeeRepository.updateEmployee(employee);
     }
 
     @Override
-    public Employee deleteEmployee(int empId) {
+    public Employee deleteEmployee(int empId) throws ServerUnavilableException {
         return employeeRepository.deleteEmployee(empId);
     }
 
     @Override
-    public List<Employee> getEmployees() {
+    public List<Employee> getEmployees() throws ServerUnavilableException {
         return employeeRepository.getEmployees();
     }
 
     @Override
-    public List<Employee> getAllManagers() {
+    public List<Employee> getAllManagers() throws ServerUnavilableException {
         return employeeRepository.getAllManagers();
     }
 }
