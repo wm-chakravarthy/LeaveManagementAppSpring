@@ -4,7 +4,6 @@ import com.wavemaker.employee.service.UserCookieService;
 import com.wavemaker.employee.service.impl.UserCookieServiceImpl;
 import com.wavemaker.employee.util.CookieHandler;
 import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ public class LogoutServlet extends HttpServlet {
     private UserCookieService userCookieService = null;
 
     @Override
-    public void init(ServletConfig config)  {
+    public void init(ServletConfig config) {
         try {
             userCookieService = new UserCookieServiceImpl();
         } catch (SQLException e) {
@@ -39,7 +38,7 @@ public class LogoutServlet extends HttpServlet {
                 logger.info("User session invalidated successfully");
             }
             cookieValue = CookieHandler.getCookieValueByCookieName(cookieName, request);
-            if (cookieValue!= null) {
+            if (cookieValue != null) {
                 userCookieService.deleteUserCookie(cookieValue);
                 logger.info("User cookie deleted successfully");
             }
@@ -48,7 +47,7 @@ public class LogoutServlet extends HttpServlet {
             response.addCookie(cookie);
 
             // Redirect to login page or home page after logout
-            response.sendRedirect("Login.jsp");
+            response.sendRedirect("Login.html");
         } catch (Exception e) {
             logger.error("Error invalidating user session", e);
         }

@@ -8,7 +8,6 @@ import com.wavemaker.employee.service.LeaveTypeService;
 import com.wavemaker.employee.service.impl.LeaveTypeServiceImpl;
 import com.wavemaker.employee.util.ClientResponseHandler;
 import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class LeaveTypeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)  {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String gender = request.getParameter("gender");
         List<LeaveType> leaveTypeList = null;
         String jsonResponse = null;

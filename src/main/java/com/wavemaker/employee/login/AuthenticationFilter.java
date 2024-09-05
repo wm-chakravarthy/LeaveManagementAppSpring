@@ -44,7 +44,12 @@ public class AuthenticationFilter implements Filter {
         UserEntity userEntity = null;
         HttpSession session = httpServletRequest.getSession(true);
         try {
+            if (cookieValue == null) {
+                httpServletResponse.sendRedirect("Login.html");
+                return;
+            }
             userEntity = userCookieService.getUserEntityByCookieValue(cookieValue);
+
             if (cookieValue != null && userEntity != null) {
                 session.setAttribute("my_user", userEntity);
                 logger.info("Authentication Successfully before proceeding chain.doFilter()");

@@ -6,14 +6,13 @@ import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
 import com.wavemaker.employee.repository.MyTeamLeaveRepository;
 import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
@@ -24,19 +23,16 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
                     + "SET lr.LEAVE_STATUS = ?, lr.DATE_OF_ACTION = ? "
                     + "WHERE lr.LEAVE_REQUEST_ID = ? AND e.MANAGER_ID = ?";
 
-    String GET_TEAM_LEAVE_REQUESTS =
+    private static final String GET_TEAM_LEAVE_REQUESTS =
             "SELECT lr.LEAVE_REQUEST_ID, lr.EMP_ID, e.NAME, lr.LEAVE_TYPE_ID, lt.LEAVE_TYPE, lr.LEAVE_REASON, " +
                     "lr.FROM_DATE, lr.TO_DATE, lr.DATE_OF_APPLICATION, lr.LEAVE_STATUS, lr.DATE_OF_ACTION, lr.TOTAL_DAYS " +
                     "FROM LEAVE_REQUEST lr " +
                     "JOIN EMPLOYEE e ON lr.EMP_ID = e.EMP_ID " +
                     "JOIN LEAVE_TYPE lt ON lr.LEAVE_TYPE_ID = lt.LEAVE_TYPE_ID " +
-                    "WHERE e.MANAGER_ID = ? ";
+                    "WHERE e.MANAGER_ID = ?";
 
-    String STATUS_FILTER_QUERY =
-            " AND lr.LEAVE_STATUS = ? ";
-
-    String ORDER_BY_QUERY =
-            " ORDER BY lr.DATE_OF_APPLICATION DESC";
+    private static final String ORDER_BY_QUERY =
+            " ORDER BY CASE WHEN lr.LEAVE_STATUS = 'PENDING' THEN 1 ELSE 2 END, lr.DATE_OF_APPLICATION DESC";
 
     private Connection connection;
 
@@ -48,28 +44,30 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
         }
     }
 
-    public List<LeaveRequestVO> getMyTeamLeaveRequests(int empId, String status) throws ServerUnavilableException {
+    @Override
+    public List<LeaveRequestVO> getMyTeamLeaveRequests(int empId, List<String> statusList) throws ServerUnavilableException {
         List<LeaveRequestVO> leaveRequestVOList = new ArrayList<>();
-
         StringBuilder queryBuilder = new StringBuilder(GET_TEAM_LEAVE_REQUESTS);
 
-        if ("ALL_EXCLUDE_PENDING".equalsIgnoreCase(status)) {
-            queryBuilder.append(" AND lr.LEAVE_STATUS != 'PENDING'");
-        }
-        else if (!"ALL".equalsIgnoreCase(status)) {
-            queryBuilder.append(STATUS_FILTER_QUERY);
+        if (statusList != null && !statusList.isEmpty()) {
+            String placeholders = String.join(",", Collections.nCopies(statusList.size(), "?"));
+            queryBuilder.append(" AND lr.LEAVE_STATUS IN (").append(placeholders).append(")");
         }
 
-        // Add the ORDER BY clause
+        // Append the ORDER BY clause
         queryBuilder.append(ORDER_BY_QUERY);
 
         String query = queryBuilder.toString();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            // Set the first parameter (empId)
             preparedStatement.setInt(1, empId);
 
-            if (!"ALL".equalsIgnoreCase(status) && !"ALL_EXCLUDE_PENDING".equalsIgnoreCase(status)) {
-                preparedStatement.setString(2, status.toUpperCase());
+            // Set the parameters for statusList
+            if (statusList != null && !statusList.isEmpty()) {
+                for (int i = 0; i < statusList.size(); i++) {
+                    preparedStatement.setString(i + 2, statusList.get(i).toUpperCase());
+                }
             }
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
@@ -79,7 +77,7 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
                     leaveRequestVO.setEmpId(rs.getInt("EMP_ID"));
                     leaveRequestVO.setEmpName(rs.getString("NAME"));
                     leaveRequestVO.setLeaveTypeId(rs.getInt("LEAVE_TYPE_ID"));
-                    leaveRequestVO.setLeaveType(rs.getString("LEAVE_TYPE")); // Set the leave type
+                    leaveRequestVO.setLeaveType(rs.getString("LEAVE_TYPE"));
                     leaveRequestVO.setLeaveReason(rs.getString("LEAVE_REASON"));
                     leaveRequestVO.setFromDate(rs.getDate("FROM_DATE"));
                     leaveRequestVO.setToDate(rs.getDate("TO_DATE"));
@@ -96,7 +94,6 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
 
         return leaveRequestVOList;
     }
-
 
     @Override
     public boolean approveOrRejectTeamLeaveRequest(int leaveRequestId, int approvingEmpId, LeaveRequestStatus approveOrReject) throws ServerUnavilableException {

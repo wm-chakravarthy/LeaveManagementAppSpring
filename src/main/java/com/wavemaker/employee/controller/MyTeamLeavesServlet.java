@@ -3,6 +3,7 @@ package com.wavemaker.employee.controller;
 import com.google.gson.Gson;
 import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.ErrorResponse;
+import com.wavemaker.employee.exception.LeaveDaysExceededException;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
@@ -19,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet("/employee/my-team-leave")
@@ -39,17 +42,26 @@ public class MyTeamLeavesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        String status = request.getParameter("status");
+        String statusParam = request.getParameter("status");
+        List<String> statusList = new ArrayList<>();
+        if (statusParam != null && !statusParam.isEmpty()) {
+            statusList = Arrays.asList(statusParam.split(","));
+        } else {
+            statusList.add("APPROVED");
+            statusList.add("REJECTED");
+            statusList.add("PENDING");
+            statusList.add("CANCELLED");
+        }
         List<LeaveRequestVO> leaveRequestList = null;
         UserEntity userEntity = null;
         String jsonResponse = null;
         try {
             userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
 
-            if (status != null) {
-                leaveRequestList = myTeamLeaveService.getMyTeamLeaveRequests(userEntity.getEmpId(), status);
-                jsonResponse = gson.toJson(leaveRequestList);
-            }
+
+            leaveRequestList = myTeamLeaveService.getMyTeamLeaveRequests(userEntity.getEmpId(), statusList);
+            jsonResponse = gson.toJson(leaveRequestList);
+
 
         } catch (ServerUnavilableException e) {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
@@ -61,7 +73,7 @@ public class MyTeamLeavesServlet extends HttpServlet {
             response.setStatus(500);
             jsonResponse = gson.toJson(errorResponse);
         } finally {
-            status = null;
+            statusList = null;
             leaveRequestList = null;
             userEntity = null;
             ClientResponseHandler.sendResponseToClient(response, jsonResponse, logger);
@@ -81,9 +93,16 @@ public class MyTeamLeavesServlet extends HttpServlet {
                 boolean isSuccess = myTeamLeaveService.approveOrRejectTeamLeaveRequest(Integer.parseInt(leaveRequestId), userEntity.getEmpId(), LeaveRequestStatus.valueOf(approveOrReject));
                 jsonResponse = gson.toJson(isSuccess);
             }
-        } catch (ServerUnavilableException e) {
+        } catch (LeaveDaysExceededException e) {
+            logger.error("Error in approving or rejecting leave request ID: {}", leaveRequestId, e);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+            jsonResponse = gson.toJson(errorResponse);
+        }
+        catch (ServerUnavilableException e) {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 500);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             jsonResponse = gson.toJson(errorResponse);
         } catch (Exception e) {
             logger.error("Server error occurred while processing GET request", e);

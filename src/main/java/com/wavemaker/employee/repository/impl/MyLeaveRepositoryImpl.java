@@ -10,48 +10,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MyLeaveRepositoryImpl implements MyLeaveRepository {
 
-    private Connection connection;
-
     private static final String INSERT_LEAVE_REQUEST_QUERY = "INSERT INTO LEAVE_REQUEST" +
             " (EMP_ID, LEAVE_TYPE_ID, LEAVE_REASON, FROM_DATE, TO_DATE, DATE_OF_APPLICATION, " +
             "LEAVE_STATUS, DATE_OF_ACTION, TOTAL_DAYS) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
-
-    private static final String GET_ALL_LEAVE_REQUESTS =
-            "SELECT lr.LEAVE_REQUEST_ID, lr.EMP_ID, e.NAME AS EMP_NAME, lt.LEAVE_TYPE, lr.LEAVE_REASON, " +
-                    "       lr.FROM_DATE, lr.TO_DATE, lr.DATE_OF_APPLICATION, lr.LEAVE_STATUS, lr.DATE_OF_ACTION, lr.TOTAL_DAYS " +
-                    "FROM LEAVE_REQUEST lr " +
-                    "JOIN EMPLOYEE e ON lr.EMP_ID = e.EMP_ID " +
-                    "JOIN LEAVE_TYPE lt ON lr.LEAVE_TYPE_ID = lt.LEAVE_TYPE_ID " +
-                    "WHERE lr.EMP_ID = ? " +
-                    "ORDER BY " +
-                    "    CASE " +
-                    "        WHEN lr.LEAVE_STATUS = 'PENDING' THEN 0 " +
-                    "        ELSE 1 " +
-                    "    END, " +
-                    "    lr.DATE_OF_APPLICATION DESC";
-
-    private static final String GET_LEAVE_REQUESTS_BY_STATUS =
-            "SELECT lr.LEAVE_REQUEST_ID, lr.EMP_ID, e.NAME AS EMP_NAME, lt.LEAVE_TYPE, lr.LEAVE_REASON, " +
-                    "       lr.FROM_DATE, lr.TO_DATE, lr.DATE_OF_APPLICATION, lr.LEAVE_STATUS, lr.DATE_OF_ACTION, lr.TOTAL_DAYS " +
-                    "FROM LEAVE_REQUEST lr " +
-                    "JOIN EMPLOYEE e ON lr.EMP_ID = e.EMP_ID " +
-                    "JOIN LEAVE_TYPE lt ON lr.LEAVE_TYPE_ID = lt.LEAVE_TYPE_ID " +
-                    "WHERE lr.EMP_ID = ? AND lr.LEAVE_STATUS = ? " +
-                    "ORDER BY lr.DATE_OF_APPLICATION DESC";
-
-    private static final String GET_ALL_LEAVE_REQUESTS_EXCLUDE_PENDING =
-            "SELECT lr.LEAVE_REQUEST_ID, lr.EMP_ID, e.NAME AS EMP_NAME, lt.LEAVE_TYPE, lr.LEAVE_REASON, " +
-                    "       lr.FROM_DATE, lr.TO_DATE, lr.DATE_OF_APPLICATION, lr.LEAVE_STATUS, lr.DATE_OF_ACTION, lr.TOTAL_DAYS " +
-                    "FROM LEAVE_REQUEST lr " +
-                    "JOIN EMPLOYEE e ON lr.EMP_ID = e.EMP_ID " +
-                    "JOIN LEAVE_TYPE lt ON lr.LEAVE_TYPE_ID = lt.LEAVE_TYPE_ID " +
-                    "WHERE lr.EMP_ID = ? AND lr.LEAVE_STATUS != 'PENDING' " +
-                    "ORDER BY lr.DATE_OF_APPLICATION DESC";
-
 
     private static final String UPDATE_LEAVE_REQUEST_SQL =
             "UPDATE leave_request SET EMP_ID = ?, LEAVE_TYPE_ID = ?, LEAVE_REASON = ?, " +
@@ -60,6 +26,18 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
 
     private static final String SQL_SELECT_EMP_ID_BY_LEAVE_REQUEST_ID =
             "SELECT EMP_ID FROM leave_request WHERE LEAVE_REQUEST_ID = ?";
+
+    private static final String GET_LEAVE_REQUESTS_BY_MULTIPLE_STATUSES =
+            "SELECT LEAVE_REQUEST_ID, LEAVE_TYPE.LEAVE_TYPE, LEAVE_REASON, FROM_DATE, TO_DATE, DATE_OF_APPLICATION, LEAVE_STATUS, DATE_OF_ACTION, TOTAL_DAYS " +
+                    "FROM leave_request " +
+                    "JOIN leave_type ON leave_request.LEAVE_TYPE_ID = leave_type.LEAVE_TYPE_ID " +
+                    "WHERE EMP_ID = ? AND LEAVE_STATUS IN (%s) " +
+                    "ORDER BY CASE WHEN LEAVE_STATUS = 'PENDING' THEN 1 ELSE 2 END, DATE_OF_APPLICATION DESC";
+
+    private static final String GET_LEAVE_TYPE_ID_AND_TOTAL_DAYS_QUERY =
+            "SELECT LEAVE_TYPE_ID, TOTAL_DAYS FROM leave_request WHERE LEAVE_REQUEST_ID = ?";
+
+    private Connection connection;
 
     public MyLeaveRepositoryImpl() throws SQLException {
         this.connection = DBConnector.getConnectionInstance();
@@ -118,30 +96,23 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
 
 
     @Override
-    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, LeaveRequestStatus status) throws ServerUnavilableException {
+    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavilableException {
         List<EmployeeLeaveRequestVO> leaveRequests = new ArrayList<>();
-        String query;
-
-        // Determine which query to use based on the status
-        if (status == LeaveRequestStatus.ALL_EXCLUDE_PENDING) {
-            query = GET_ALL_LEAVE_REQUESTS_EXCLUDE_PENDING;
-        } else if (status == LeaveRequestStatus.ALL) {
-            query = GET_ALL_LEAVE_REQUESTS;
-        } else {
-            query = GET_LEAVE_REQUESTS_BY_STATUS;
-        }
+        // Generate placeholders for the status list
+        String placeholders = String.join(",", Collections.nCopies(statusList.size(), "?"));
+        String query = String.format(GET_LEAVE_REQUESTS_BY_MULTIPLE_STATUSES, placeholders);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empId);
-            if (status != LeaveRequestStatus.ALL && status != LeaveRequestStatus.ALL_EXCLUDE_PENDING) {
-                preparedStatement.setString(2, status.name());
+            for (int i = 0; i < statusList.size(); i++) {
+                preparedStatement.setString(i + 2, statusList.get(i)); // Index starts from 2 as 1 is for empId
             }
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     EmployeeLeaveRequestVO leaveRequest = new EmployeeLeaveRequestVO();
                     leaveRequest.setLeaveRequestId(rs.getInt("LEAVE_REQUEST_ID"));
-                    leaveRequest.setLeaveType(rs.getString("LEAVE_TYPE")); // Adjusted column name
+                    leaveRequest.setLeaveType(rs.getString("LEAVE_TYPE"));
                     leaveRequest.setLeaveReason(rs.getString("LEAVE_REASON"));
                     leaveRequest.setFromDate(rs.getDate("FROM_DATE"));
                     leaveRequest.setToDate(rs.getDate("TO_DATE"));
@@ -200,4 +171,25 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
         }
         return empId;
     }
+
+    @Override
+    public List<Integer> getLeaveTypeIdAndTotalDaysByLeaveRequestId(int leaveRequestId) throws ServerUnavilableException {
+        List<Integer> result = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_LEAVE_TYPE_ID_AND_TOTAL_DAYS_QUERY);
+            preparedStatement.setInt(1, leaveRequestId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int leaveTypeId = resultSet.getInt("LEAVE_TYPE_ID");
+                    int totalDays = resultSet.getInt("TOTAL_DAYS");
+                    result.add(leaveTypeId);
+                    result.add(totalDays);
+                }
+            }
+        } catch (SQLException e) {
+            throw new ServerUnavilableException("Error fetching leave type ID and total days", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        return result;
+    }
+
 }

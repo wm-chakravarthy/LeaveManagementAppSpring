@@ -44,16 +44,16 @@ public class EmployeeLeaveRequestVO {
         return fromDate;
     }
 
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
     public int getTotalDays() {
         return totalDays;
     }
 
     public void setTotalDays(int totalDays) {
         this.totalDays = totalDays;
-    }
-
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
     }
 
     public Date getToDate() {

@@ -5,6 +5,7 @@ import com.wavemaker.employee.exception.ErrorResponse;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.UserEntity;
+import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
 import com.wavemaker.employee.service.EmployeeLeaveSummaryService;
 import com.wavemaker.employee.service.impl.EmployeeLeaveSummaryServiceImpl;
 import com.wavemaker.employee.util.ClientResponseHandler;
@@ -19,10 +20,11 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
-@WebServlet("/employee/leave/summary")
-public class EmployeeLeaveSummaryServlet extends HttpServlet {
-    private static final Logger logger = LoggerFactory.getLogger(EmployeeLeaveSummaryServlet.class);
+@WebServlet("/employee/team/leave/summary")
+public class TeamLeaveSummaryServlet extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(TeamLeaveSummaryServlet.class);
     private Gson gson = null;
     private EmployeeLeaveSummaryService employeeLeaveSummaryService = null;
 
@@ -38,16 +40,23 @@ public class EmployeeLeaveSummaryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        String empId = request.getParameter("empId");
         UserEntity userEntity = null;
         String jsonResponse = null;
         List<EmployeeLeaveSummary> employeeLeaveSummaryList = null;
+        Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> leaveSummaryMap = null;
         try {
             userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
-
-            logger.info("Fetching leave summary for employee : {}", userEntity);
-            employeeLeaveSummaryList = employeeLeaveSummaryService.getEmployeeLeaveSummariesById(userEntity.getEmpId());
-            jsonResponse = gson.toJson(employeeLeaveSummaryList);
-
+            if (empId != null) {
+                logger.info("Fetching leave summary for employee ID: {}", empId);
+                employeeLeaveSummaryList = employeeLeaveSummaryService.getEmployeeLeaveSummariesById(Integer.parseInt(empId));
+                jsonResponse = gson.toJson(employeeLeaveSummaryList);
+                employeeLeaveSummaryList = null;
+                ClientResponseHandler.sendResponseToClient(response, jsonResponse, logger);
+                return;
+            }
+            leaveSummaryMap = employeeLeaveSummaryService.getAllEmployeesLeaveSummary(userEntity.getEmpId());
+            jsonResponse = gson.toJson(leaveSummaryMap);
         } catch (ServerUnavilableException e) {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 500);
@@ -59,7 +68,7 @@ public class EmployeeLeaveSummaryServlet extends HttpServlet {
             jsonResponse = gson.toJson(errorResponse);
         } finally {
             userEntity = null;
-            employeeLeaveSummaryList = null;
+            leaveSummaryMap = null;
             ClientResponseHandler.sendResponseToClient(response, jsonResponse, logger);
         }
     }

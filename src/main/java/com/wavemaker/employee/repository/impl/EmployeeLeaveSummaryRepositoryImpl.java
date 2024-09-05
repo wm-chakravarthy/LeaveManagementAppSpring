@@ -17,26 +17,45 @@ import java.util.List;
 import java.util.Map;
 
 public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryRepository {
+
     private static final String FETCH_LEAVE_REQUESTS_QUERY =
             "SELECT LEAVE_TYPE_ID, TOTAL_DAYS " +
                     "FROM LEAVE_REQUEST " +
                     "WHERE EMP_ID = ? AND LEAVE_STATUS = 'APPROVED'";
+
     private static final String UPDATE_SUMMARY_QUERY =
             "UPDATE EMPLOYEE_LEAVE_SUMMARY " +
                     "SET TOTAL_LEAVES_TAKEN = ?, " +
                     " PENDING_LEAVES = (SELECT MAX_LEAVE_DAYS_ALLOWED " +
                     "FROM LEAVE_TYPE WHERE LEAVE_TYPE_ID = ?) - ? " +
                     "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
+
     private static final String SQL_SELECT_EMPLOYEE_LEAVE_SUMMARY =
             "SELECT SUMMARY_ID, EMP_ID, LEAVE_TYPE_ID, LEAVE_TYPE, PENDING_LEAVES, TOTAL_LEAVES_TAKEN, LAST_UPDATED " +
                     "FROM employee_leave_summary " +
                     "WHERE EMP_ID = ?";
+
     private static final String EMPLOYEES_QUERY = "SELECT `EMP_ID`, `NAME` " +
             "FROM `employee` " +
             "WHERE `MANAGER_ID` = ?";
+
     private static final String LEAVE_SUMMARIES_QUERY = "SELECT `SUMMARY_ID`, `EMP_ID`, `LEAVE_TYPE_ID`, `LEAVE_TYPE`, `PENDING_LEAVES`, `TOTAL_LEAVES_TAKEN`, `LAST_UPDATED` " +
             "FROM `employee_leave_summary` " +
             "WHERE `EMP_ID` = ?";
+
+    private static final String QUERY_PENDING_LEAVES =
+            "SELECT PENDING_LEAVES FROM employee_leave_summary WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
+
+    private static final String CHECK_QUERY = "SELECT PENDING_LEAVES, TOTAL_LEAVES_TAKEN " +
+            "FROM EMPLOYEE_LEAVE_SUMMARY " +
+            "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
+
+    private static final String UPDATE_QUERY = "UPDATE EMPLOYEE_LEAVE_SUMMARY " +
+            "SET PENDING_LEAVES = PENDING_LEAVES - ?, " +
+            "TOTAL_LEAVES_TAKEN = TOTAL_LEAVES_TAKEN + ?, " +
+            "LAST_UPDATED = CURRENT_TIMESTAMP " +
+            "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
+
     private Connection connection;
 
     public EmployeeLeaveSummaryRepositoryImpl() throws SQLException {
@@ -44,38 +63,33 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
     }
 
     @Override
-    public boolean updateEmployeeLeaveSummary(int empId) throws ServerUnavilableException {
+    public boolean updateEmployeeLeaveSummary(int empId, int leaveTypeId, int totalDays) throws ServerUnavilableException {
+        PreparedStatement checkStmt = null;
+        PreparedStatement updateStmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement fetchStmt = connection.prepareStatement(FETCH_LEAVE_REQUESTS_QUERY);
-            fetchStmt.setInt(1, empId);
-            ResultSet rs = fetchStmt.executeQuery();
+            checkStmt = connection.prepareStatement(CHECK_QUERY);
+            checkStmt.setInt(1, empId);
+            checkStmt.setInt(2, leaveTypeId);
+            rs = checkStmt.executeQuery();
 
-            // 2. Calculate total leaves taken per leave type
-            Map<Integer, Integer> leaveSummaryMap = new HashMap<>();
+            if (rs.next()) {
+                updateStmt = connection.prepareStatement(UPDATE_QUERY);
+                updateStmt.setInt(1, totalDays);
+                updateStmt.setInt(2, totalDays);
+                updateStmt.setInt(3, empId);
+                updateStmt.setInt(4, leaveTypeId);
 
-            while (rs.next()) {
-                int leaveTypeId = rs.getInt("LEAVE_TYPE_ID");
-                int totalDays = rs.getInt("TOTAL_DAYS");
-
-                leaveSummaryMap.put(leaveTypeId, leaveSummaryMap.getOrDefault(leaveTypeId, 0) + totalDays);
+                int rowsAffected = updateStmt.executeUpdate();
+                return rowsAffected > 0;
+            } else {
+                return false;
             }
-            PreparedStatement updateStmt = connection.prepareStatement(UPDATE_SUMMARY_QUERY);
-            for (Map.Entry<Integer, Integer> entry : leaveSummaryMap.entrySet()) {
-                int leaveTypeId = entry.getKey();
-                int totalLeavesTaken = entry.getValue();
-
-                updateStmt.setInt(1, totalLeavesTaken);
-                updateStmt.setInt(2, leaveTypeId);
-                updateStmt.setInt(3, totalLeavesTaken);
-                updateStmt.setInt(4, empId);
-                updateStmt.setInt(5, leaveTypeId);
-                updateStmt.executeUpdate();
-            }
-            return true;
         } catch (Exception e) {
             throw new ServerUnavilableException("Could not update employee leave summary", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @Override
     public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(int empId) throws ServerUnavilableException {
@@ -151,4 +165,25 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
             throw new ServerUnavilableException("Error fetching all employee leave summaries", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public boolean isLeaveTypeWithinRange(int empId, int leaveTypeId, int totalDays) throws ServerUnavilableException {
+        try {
+            PreparedStatement statement = connection.prepareStatement(QUERY_PENDING_LEAVES);
+            statement.setInt(1, empId);
+            statement.setInt(2, leaveTypeId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int pendingLeaves = resultSet.getInt("PENDING_LEAVES");
+                    return totalDays <= pendingLeaves;
+                } else {
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            throw new ServerUnavilableException("Error checking leave type range", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

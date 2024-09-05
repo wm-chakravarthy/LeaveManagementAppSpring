@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -74,8 +75,8 @@ public class LoginServlet extends HttpServlet {
                 logger.info("User Cookie added Successfully to browser : {}", cookie);
                 response.sendRedirect("index.html");
             } else {
-                request.setAttribute("errorMessage", "Invalid Username or Password");
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                writeResponse(response, "User  login with incorrect authentication.");
+                response.sendRedirect("Login.html?error=" + URLEncoder.encode("Invalid username or password.", "UTF-8"));
                 logger.error("Invalid User Found: Username: {} and User Password: {}", email, password);
             }
         } catch (Exception e) {
@@ -83,7 +84,7 @@ public class LoginServlet extends HttpServlet {
             jsonResponse = gson.toJson(errorResponse);
             logger.error("Error Occurred while trying to Login ", e);
         } finally {
-            ClientResponseHandler.sendResponseToClient(response,jsonResponse,logger);
+            ClientResponseHandler.sendResponseToClient(response, jsonResponse, logger);
         }
 
     }
@@ -98,20 +99,28 @@ public class LoginServlet extends HttpServlet {
         try {
             userEntity = userCookieService.getUserEntityByCookieValue(cookieValue);
             if (userEntity == null) {
-                errorResponse = new ErrorResponse("Invalid User Found",HttpServletResponse.SC_UNAUTHORIZED);
+                errorResponse = new ErrorResponse("Invalid User Found", HttpServletResponse.SC_UNAUTHORIZED);
                 jsonResponse = gson.toJson(errorResponse);
-                ClientResponseHandler.sendResponseToClient(response,jsonResponse,logger);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                ClientResponseHandler.sendResponseToClient(response, jsonResponse, logger);
             }
             employeeVO = employeeService.getEmployeeById(userEntity.getEmpId());
             jsonResponse = gson.toJson(employeeVO);
+            ClientResponseHandler.sendResponseToClient(response, jsonResponse, logger);
 
         } catch (ServerUnavilableException e) {
             errorResponse = new ErrorResponse("Error - User not found in the system : " + e.getMessage(), 401);
             jsonResponse = gson.toJson(errorResponse);
             logger.error("Error Occurred while trying to get User from cookie", e);
-        } finally {
-            ClientResponseHandler.sendResponseToClient(response,jsonResponse,logger);
+            ClientResponseHandler.sendResponseToClient(response, jsonResponse, logger);
         }
+    }
+
+    private void writeResponse(HttpServletResponse response, String message) throws IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.println(message);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.wavemaker.employee.controller;
 
 import com.google.gson.Gson;
-import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.ErrorResponse;
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
 import com.wavemaker.employee.exception.ServerUnavilableException;
@@ -24,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet("/employee/leave")
@@ -44,17 +45,25 @@ public class MyLeavesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        String status = request.getParameter("status");
+        String statusParam = request.getParameter("status");
+        List<String> statusList = new ArrayList<>();
+        if (statusParam != null && !statusParam.isEmpty()) {
+            statusList = Arrays.asList(statusParam.split(","));
+        } else {
+            statusList.add("APPROVED");
+            statusList.add("REJECTED");
+            statusList.add("PENDING");
+            statusList.add("CANCELLED");
+        }
+
         List<EmployeeLeaveRequestVO> employeeLeaveRequestVOList = null;
         UserEntity userEntity = null;
         String jsonResponse = null;
         try {
             userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
 
-            if (status != null && !status.isEmpty()) {
-                employeeLeaveRequestVOList = myLeaveService.getMyLeaveRequests(userEntity.getEmpId(), LeaveRequestStatus.valueOf(status));
-                jsonResponse = gson.toJson(employeeLeaveRequestVOList);
-            }
+            employeeLeaveRequestVOList = myLeaveService.getMyLeaveRequests(userEntity.getEmpId(), statusList);
+            jsonResponse = gson.toJson(employeeLeaveRequestVOList);
         } catch (ServerUnavilableException e) {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 500);
@@ -95,10 +104,9 @@ public class MyLeavesServlet extends HttpServlet {
         } catch (LeaveDaysExceededException e) {
             logger.error("Error processing Leave request for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 400);
-            response.setStatus(400);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             jsonResponse = gson.toJson(errorResponse);
-        }
-        catch (ServerUnavilableException e) {
+        } catch (ServerUnavilableException e) {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 500);
             jsonResponse = gson.toJson(errorResponse);

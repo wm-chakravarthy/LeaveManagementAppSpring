@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeRepository employeeRepository = null;
+    private static EmployeeRepository employeeRepository = null;
 
     public EmployeeServiceImpl() throws SQLException {
         employeeRepository = EmployeeRepositoryInstanceHandler.getEmployeeRepositoryInstance();

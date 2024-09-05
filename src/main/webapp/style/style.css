@@ -68,8 +68,6 @@ body {
 
 
 .details-card {
-    padding: 20px;
-
     border-radius: 8px;
 
     margin-top: 20px;
@@ -162,41 +160,45 @@ body {
     color: white;
     /* White text */
 }
+
 .apply-btn {
     margin-right: 27px;
     width: 183px;
 }
 
-.reject-btn{
-margin-right: 8px;
+.reject-btn {
+    margin-right: 8px;
 }
+
 #leave-summary-cards {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping if needed */
-    gap: 20px; /* Space between the cards */
+    flex-wrap: wrap;
+    /* Allow wrapping if needed */
+    gap: 20px;
+    /* Space between the cards */
     padding: 10px;
     box-sizing: border-box;
-    justify-content: center; /* Center the cards horizontally */
+    justify-content: center;
+    /* Center the cards horizontally */
 }
 
 .leave-card {
-    background-color: #ffffff; /* White background for contrast */
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 8px; /* Rounded corners */
+    background-color: #cbdce1;
+    ;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding: 15px;
-    width: 200px; /* Fixed width for all cards */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    box-sizing: border-box; /* Include padding and border in the width */
+    width: 361px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
     text-align: center;
-    flex: 1 1 calc(50% - 20px); /* 2 cards per row with spacing */
-    /* Ensure that each card takes up approximately 50% of the row minus the gap */
 }
 
 .leave-card .card-title {
-       font-size: 25px;
-       font-weight: bold;
-       color: #664ee0;
-       margin-bottom: 16px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #664ee0;
+    margin-bottom: 16px;
 }
 
 .leave-card .card-info {
@@ -206,14 +208,17 @@ margin-right: 8px;
 }
 
 .leave-card .available-leaves {
- font-size: 18px;
-    color: #2ecc71; /* Green color for available leaves */
+    font-size: 18px;
+    color: #2ecc71;
+    /* Green color for available leaves */
 }
 
 .leave-card .used-leaves {
-font-size: 18px;
-    color: #e74c3c; /* Red color for used leaves */
+    font-size: 18px;
+    color: #e74c3c;
+    /* Red color for used leaves */
 }
+
 #summary-container {
     display: flex;
     flex-direction: column;
@@ -268,5 +273,332 @@ font-size: 18px;
 
 
 .leave-card .last-updated {
-    color: #999; /* Light gray for the date */
+    color: #999;
+    /* Light gray for the date */
+}
+
+
+.team-leaves-table {
+    background-color: #003366 !important;
+    /* Apply dark blue background with !important */
+    color: #ffffff;
+    /* White text color for contrast */
+}
+
+/* Status cell styling */
+.status-cell {
+    padding: 5px;
+    text-align: center;
+    /* Center text horizontally */
+    vertical-align: middle;
+    /* Center text vertically */
+    font-weight: bold;
+}
+
+/* Specific text color for each status */
+.status-cell.approved {
+    color: #4CAF50;
+    /* Green text for Approved */
+}
+
+.status-cell.rejected {
+    color: #F44336;
+    /* Red text for Rejected */
+}
+
+.status-cell.pending {
+    color: #FFC107;
+    /* Yellow text for Pending */
+}
+
+.status-cell.cancelled {
+    color: #9E9E9E;
+    /* Grey text for Cancelled */
+}
+
+.summary-title {
+    text-align: center;
+}
+
+/* Base style for status cells */
+.status-cell {
+    padding: 5px;
+
+    vertical-align: middle;
+    /* Center text vertically */
+    font-weight: bold;
+}
+
+.status-cell.approved {
+    color: #2e8b57 !important;
+    /* Sea Green for Approved */
+}
+
+.status-cell.rejected {
+    color: #cc3333 !important;
+    /* Soft Red for Rejected */
+}
+
+.status-cell.pending {
+    color: #d89a00 !important;
+    /* Warm Yellow for Pending */
+}
+
+.status-cell.cancelled {
+    color: #6c757d !important;
+    /* Muted Grey for Cancelled */
+}
+
+/* Base style for the table */
+.my-leaves-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #caddeb;
+    /* Light blue background color for the table */
+}
+
+.my-leaves-table th,
+.my-leaves-table td {
+    border: 1px solid #a0c4d8;
+    /* Slightly darker border color */
+    padding: 8px;
+    text-align: center;
+    color: #003366;
+    /* Darker blue for table text */
+}
+
+.my-leaves-table th {
+    text-align: center;
+    background-color: #b0cfdb;
+    /* Slightly darker header background */
+}
+
+.my-leaves-table tbody tr:nth-child(odd) {
+    background-color: #d6e4ec;
+    /* Light alternating row color */
+}
+
+.my-leaves-table tbody tr:nth-child(even) {
+    background-color: #ebf3f7;
+    /* Lightest alternating row color */
+}
+
+/* Status cell styling */
+.status-cell {
+    padding: 5px;
+    text-align: center;
+    /* Center text horizontally */
+    vertical-align: middle;
+    /* Center text vertically */
+    font-weight: bold;
+}
+
+/* Specific text color for each status with !important */
+.status-cell.approved {
+    color: #2e8b57 !important;
+    /* Sea Green for Approved */
+}
+
+.status-cell.rejected {
+    color: #cc3333 !important;
+    /* Soft Red for Rejected */
+}
+
+.status-cell.pending {
+    color: #d89a00 !important;
+    /* Warm Yellow for Pending */
+}
+
+.status-cell.cancelled {
+    color: #6c757d !important;
+    /* Muted Grey for Cancelled */
+}
+
+.custom-leaves-table {
+    background-color: #caddeb;
+    /* Light blue background color for the table */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-leaves-table thead th {
+    background-color: #b0c7db;
+    /* Slightly darker blue for the table header */
+    color: #333;
+    /* Dark text color for better contrast */
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.custom-leaves-table tbody td {
+    text-align: center;
+    padding: 8px;
+    border-top: 1px solid #dfe7ef;
+    /* Light border for separation */
+    vertical-align: middle;
+    /* Center content vertically */
+}
+
+.custom-leaves-table tbody tr:nth-child(odd) {
+    background-color: #d6e4ec;
+    /* Light alternating row color */
+}
+
+.custom-leaves-table tbody tr:nth-child(even) {
+    background-color: #ebf3f7;
+    /* Lightest alternating row color */
+}
+
+.approve-btn {
+    margin-right: 10px;
+}
+
+.reject-btn {
+    margin-right: 10px;
+}
+
+/* CSS for Leave Summary Modal */
+#leaveSummaryModal .modal-body {
+    text-align: left;
+}
+
+.leave-summary {
+    margin-bottom: 15px;
+}
+
+.leave-summary h5 {
+    margin-bottom: 5px;
+    font-size: 1.2em;
+}
+
+.leave-summary p {
+    margin: 0;
+    font-size: 1em;
+}
+
+/* Container Styling for Upcoming Leaves */
+#upcoming-leaves-container {
+    margin-top: 42px;
+    /* Space above the table */
+}
+
+#my-team-upcoming-leaves-container {
+    margin-top: 42px;
+    /* Space above the table */
+}
+
+/* Title Styling for Upcoming Leaves */
+#upcoming-leaves-title {
+    text-align: center;
+    color: #003366;
+    /* Dark blue color for the title */
+}
+
+#my-team-upcoming-leaves-title {
+    text-align: center;
+    color: #003366;
+    /* Dark blue color for the title */
+}
+
+/* Table Styling for Upcoming Leaves */
+#upcoming-leaves-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #caddeb;
+    /* Light blue background color for the table */
+}
+
+#my-team-upcoming-leaves-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #caddeb;
+    /* Light blue background color for the table */
+}
+
+/* Table Header and Cell Styling for Upcoming Leaves */
+#upcoming-leaves-table th,
+#upcoming-leaves-table td {
+    text-align: center;
+    border: 1px solid #a0c4d8;
+    /* Slightly darker border color */
+    padding: 8px;
+    color: #003366;
+    /* Darker blue for table text */
+}
+
+#my-team-upcoming-leaves-table th,
+#my-team-upcoming-leaves-table td {
+    text-align: center;
+    border: 1px solid #a0c4d8;
+    /* Slightly darker border color */
+    padding: 8px;
+    color: #003366;
+    /* Darker blue for table text */
+}
+
+/* Table Header Background Color */
+#upcoming-leaves-table th {
+    background-color: #003366;
+    /* Dark blue background for header */
+    color: #ffffff;
+    /* White text for header */
+}
+
+#my-team-upcoming-leaves-table th {
+    background-color: #003366;
+    /* Dark blue background for header */
+    color: #ffffff;
+    /* White text for header */
+}
+
+#upcoming-leaves-body {
+    background-color: #caddeb;
+}
+
+#my-team-upcoming-leaves-body {
+    background-color: #caddeb;
+}
+
+
+.upcoming-holidays-title {
+    margin-top: 10px;
+    text-align: center;
+    color: #003366;
+}
+
+.holiday-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #caddeb !important;
+}
+
+
+.holiday-head {
+    background-color: #003366 !important;
+}
+
+.holiday-td {
+    text-align: center !important;
+    border: 1px solid #a0c4d8 !important;
+    padding: 8px;
+    color: #003366 !important;
+}
+
+.holiday-table td {
+    color: #003366 !important;
+    border: 1px solid #a0c4d8;
+    text-align: center !important;
+    background-color: #a0c4d8 !important;
+    padding: 8px;
+}
+.holiday-table th {
+    border: 1px solid #a0c4d8;
+    text-align: center !important;
+    padding: 8px;
+    background-color: #003366 !important;
+    color: #ffffff !important;
+}
+.my-leaves-cancel-btn {
+    margin-right: 16px;
 }

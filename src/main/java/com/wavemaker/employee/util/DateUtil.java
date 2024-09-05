@@ -1,13 +1,18 @@
 package com.wavemaker.employee.util;
 
+import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.service.HolidayService;
+import com.wavemaker.employee.service.impl.HolidayServiceImpl;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
 public class DateUtil {
+    private static final HolidayService holidayService = new HolidayServiceImpl();
 
-    public static int calculateTotalDaysExcludingWeekends(Date fromDate, Date toDate) {
+    public static int calculateTotalDaysExcludingWeekendsAndHolidays(Date fromDate, Date toDate) throws ServerUnavilableException {
         LocalDate start = convertToLocalDate(fromDate);
         LocalDate end = convertToLocalDate(toDate);
 
@@ -22,7 +27,7 @@ public class DateUtil {
             currentDate = currentDate.plusDays(1);
         }
 
-        return totalDays;
+        return totalDays - holidayService.getUpcomingHolidayDatesList().size();
     }
 
     private static LocalDate convertToLocalDate(Date date) {

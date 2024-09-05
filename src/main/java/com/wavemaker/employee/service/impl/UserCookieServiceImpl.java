@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class UserCookieServiceImpl implements UserCookieService {
     private static UserEntityService userEntityService;
-    private UserCookieRepository userCookieRepository;
+    private static UserCookieRepository userCookieRepository;
 
     public UserCookieServiceImpl() throws SQLException {
         userCookieRepository = UserCookieRepositoryInstanceHandler.getUserCookieRepositoryInstance();
