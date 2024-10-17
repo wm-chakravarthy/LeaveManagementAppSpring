@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class DBConnector {
     private static final Logger logger = LoggerFactory.getLogger(DBConnector.class);
     //constants
