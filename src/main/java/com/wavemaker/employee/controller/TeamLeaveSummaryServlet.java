@@ -17,25 +17,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 @WebServlet("/employee/team/leave/summary")
 public class TeamLeaveSummaryServlet extends HttpServlet {
+
     private static final Logger logger = LoggerFactory.getLogger(TeamLeaveSummaryServlet.class);
     private Gson gson = null;
-    private EmployeeLeaveSummaryService employeeLeaveSummaryService = null;
+
+    @Autowired
+    private EmployeeLeaveSummaryService employeeLeaveSummaryService;
 
     @Override
     public void init(ServletConfig config) {
-        try {
-            gson = new Gson();
-            employeeLeaveSummaryService = new EmployeeLeaveSummaryServiceImpl();
-        } catch (SQLException e) {
-            logger.error("Exception", e);
-        }
+        gson = new Gson();
     }
 
     @Override

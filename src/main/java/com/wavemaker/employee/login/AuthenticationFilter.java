@@ -5,7 +5,6 @@ import com.wavemaker.employee.exception.ErrorResponse;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.service.UserCookieService;
-import com.wavemaker.employee.service.impl.UserCookieServiceImpl;
 import com.wavemaker.employee.util.CookieHandler;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -14,25 +13,23 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 @WebFilter("/employee/*")
 public class AuthenticationFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
-    private static UserCookieService userCookieService;
+
+    @Autowired
+    private UserCookieService userCookieService;
+
     private static Gson gson = null;
 
     @Override
     public void init(FilterConfig filterConfig) {
-        try {
-            userCookieService = new UserCookieServiceImpl();
-            gson = new Gson();
-        } catch (SQLException e) {
-            logger.error("Exception", e);
-        }
+        gson = new Gson();
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.Employee;
 import com.wavemaker.employee.pojo.dto.EmployeeVO;
 import com.wavemaker.employee.service.EmployeeService;
-import com.wavemaker.employee.service.impl.EmployeeServiceImpl;
 import com.wavemaker.employee.util.ClientResponseHandler;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,24 +14,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/employee")
 public class EmployeeServlet extends HttpServlet {
+
     private static final Logger logger = LoggerFactory.getLogger(EmployeeServlet.class);
+
+    @Autowired
     private static EmployeeService employeeService;
+
     private static Gson gson = null;
 
     @Override
     public void init(ServletConfig config) {
-        try {
-            gson = new Gson();
-            employeeService = new EmployeeServiceImpl();
-        } catch (SQLException e) {
-            logger.error("Exception", e);
-        }
+        gson = new Gson();
     }
 
     @Override

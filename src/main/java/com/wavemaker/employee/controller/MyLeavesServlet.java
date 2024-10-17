@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,18 +30,17 @@ import java.util.List;
 
 @WebServlet("/employee/leave")
 public class MyLeavesServlet extends HttpServlet {
+
     private static final Logger logger = LoggerFactory.getLogger(MyLeavesServlet.class);
+
+    @Autowired
     private MyLeaveService myLeaveService;
+
     private Gson gson;
 
     @Override
     public void init(ServletConfig config) {
-        try {
-            gson = new Gson();
-            myLeaveService = new MyLeaveServiceImpl();
-        } catch (SQLException e) {
-            logger.error("Exception : ", e);
-        }
+        gson = new Gson();
     }
 
     @Override

@@ -23,6 +23,7 @@ public class MyLeaveServiceImpl implements MyLeaveService {
     private MyLeaveRepository myLeaveRepository;
 
     @Autowired
+    @Qualifier("employeeLeaveSummaryServiceInDB")
     private EmployeeLeaveSummaryService employeeLeaveSummaryService;
 
     @Override

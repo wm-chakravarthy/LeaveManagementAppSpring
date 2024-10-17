@@ -8,18 +8,22 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.sql.SQLException;
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(LogoutServlet.class);
 
-    @Autowired
-    private UserCookieService userCookieService;
+    private UserCookieService userCookieService = null;
 
     @Override
     public void init(ServletConfig config) {
-        userCookieService = new UserCookieServiceImpl();
+        try {
+            userCookieService = new UserCookieServiceImpl();
+        } catch (SQLException e) {
+            logger.error("Exception", e);
+        }
     }
 
     @Override

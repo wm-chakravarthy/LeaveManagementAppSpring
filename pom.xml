@@ -14,6 +14,24 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+    <!--Spring Dependencies -->
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>6.1.13</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>6.1.13</version>
+    </dependency>
+
+
     <!--log dependencies -->
     <!-- SLF4j API for logging abstraction -->
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->

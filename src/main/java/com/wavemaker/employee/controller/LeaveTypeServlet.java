@@ -14,24 +14,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/leavetypes")
 public class LeaveTypeServlet extends HttpServlet {
+
     private static final Logger logger = LoggerFactory.getLogger(LeaveTypeServlet.class);
+
+    @Autowired
     private static LeaveTypeService leaveTypeService;
+
     private Gson gson = null;
 
     @Override
     public void init(ServletConfig config) {
-        try {
-            leaveTypeService = new LeaveTypeServiceImpl();
-            gson = new Gson();
-        } catch (SQLException e) {
-            logger.error("Exception : ", e);
-        }
+        gson = new Gson();
     }
 
     @Override

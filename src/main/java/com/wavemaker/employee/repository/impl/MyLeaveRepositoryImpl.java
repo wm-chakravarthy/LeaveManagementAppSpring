@@ -5,14 +5,17 @@ import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.LeaveRequest;
 import com.wavemaker.employee.pojo.dto.EmployeeLeaveRequestVO;
 import com.wavemaker.employee.repository.MyLeaveRepository;
-import com.wavemaker.employee.util.DBConnector;
+import com.wavemaker.employee.util.DBConfig;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Repository("myLeaveRepositoryInDB")
 public class MyLeaveRepositoryImpl implements MyLeaveRepository {
 
     private static final String INSERT_LEAVE_REQUEST_QUERY = "INSERT INTO LEAVE_REQUEST" +
@@ -37,11 +40,8 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
     private static final String GET_LEAVE_TYPE_ID_AND_TOTAL_DAYS_QUERY =
             "SELECT LEAVE_TYPE_ID, TOTAL_DAYS FROM leave_request WHERE LEAVE_REQUEST_ID = ?";
 
+    @Autowired
     private Connection connection;
-
-    public MyLeaveRepositoryImpl() throws SQLException {
-        this.connection = DBConnector.getConnectionInstance();
-    }
 
     @Override
     public LeaveRequest applyForLeave(LeaveRequest leaveRequest) throws ServerUnavilableException {

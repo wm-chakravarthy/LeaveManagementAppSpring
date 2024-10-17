@@ -3,27 +3,30 @@ package com.wavemaker.employee.service.impl;
 import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
 import com.wavemaker.employee.exception.ServerUnavilableException;
-import com.wavemaker.employee.factory.MyTeamLeavesRepositoryInstanceHandler;
 import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
 import com.wavemaker.employee.repository.MyTeamLeaveRepository;
 import com.wavemaker.employee.service.EmployeeLeaveSummaryService;
 import com.wavemaker.employee.service.MyLeaveService;
 import com.wavemaker.employee.service.MyTeamLeaveService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class MyTeamLeaveServiceImpl implements MyTeamLeaveService {
-    private static MyTeamLeaveRepository myTeamLeaveRepository;
-    private static MyLeaveService myLeaveService = null;
-    private static EmployeeLeaveSummaryService employeeLeaveSummaryService = null;
 
-    public MyTeamLeaveServiceImpl() throws SQLException {
-        myLeaveService = new MyLeaveServiceImpl();
-        employeeLeaveSummaryService = new EmployeeLeaveSummaryServiceImpl();
-        myTeamLeaveRepository = MyTeamLeavesRepositoryInstanceHandler.getMyTeamLeaveRepositoryInstance();
-    }
+    @Autowired
+    @Qualifier("myTeamLeaveRepositoryInDB")
+    private MyTeamLeaveRepository myTeamLeaveRepository;
+
+    @Autowired
+    private MyLeaveService myLeaveService;
+
+    @Autowired
+    private EmployeeLeaveSummaryService employeeLeaveSummaryService;
 
     @Override
     public List<LeaveRequestVO> getMyTeamLeaveRequests(int managerEmpId, List<String> statusList) throws ServerUnavilableException {

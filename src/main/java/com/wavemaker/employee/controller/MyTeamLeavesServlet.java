@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,18 +27,17 @@ import java.util.List;
 
 @WebServlet("/employee/my-team-leave")
 public class MyTeamLeavesServlet extends HttpServlet {
+
     private static final Logger logger = LoggerFactory.getLogger(MyLeavesServlet.class);
+
     private Gson gson;
+
+    @Autowired
     private MyTeamLeaveService myTeamLeaveService;
 
     @Override
     public void init(ServletConfig config) {
-        try {
-            myTeamLeaveService = new MyTeamLeaveServiceImpl();
-            gson = new Gson();
-        } catch (SQLException sqlException) {
-            logger.error("Exception : ", sqlException);
-        }
+        gson = new Gson();
     }
 
     @Override
@@ -98,8 +98,7 @@ public class MyTeamLeavesServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
             jsonResponse = gson.toJson(errorResponse);
-        }
-        catch (ServerUnavilableException e) {
+        } catch (ServerUnavilableException e) {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 500);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -29,16 +29,16 @@ public class Holiday {
         return holidayDate;
     }
 
+    public void setHolidayDate(Date holidayDate) {
+        this.holidayDate = holidayDate;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setHolidayDate(Date holidayDate) {
-        this.holidayDate = holidayDate;
     }
 
     @Override

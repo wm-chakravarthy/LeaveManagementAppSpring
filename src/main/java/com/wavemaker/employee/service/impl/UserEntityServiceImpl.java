@@ -2,19 +2,18 @@ package com.wavemaker.employee.service.impl;
 
 
 import com.wavemaker.employee.exception.ServerUnavilableException;
-import com.wavemaker.employee.factory.UserEntityRepositoryInstanceHandler;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserEntityRepository;
 import com.wavemaker.employee.service.UserEntityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.sql.SQLException;
-
+//@Service
 public class UserEntityServiceImpl implements UserEntityService {
-    private static UserEntityRepository userEntityRepository = null;
 
-    public UserEntityServiceImpl() throws SQLException {
-        userEntityRepository = UserEntityRepositoryInstanceHandler.getUserEntityRepositoryInstance();
-    }
+    @Autowired
+    @Qualifier("userEntityRepositoryInDB")
+    private UserEntityRepository userEntityRepository;
 
     @Override
     public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavilableException {

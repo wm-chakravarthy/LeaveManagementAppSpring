@@ -1,8 +1,6 @@
 package com.wavemaker.employee.util;
 
 import com.wavemaker.employee.exception.ServerUnavilableException;
-import com.wavemaker.employee.service.HolidayService;
-import com.wavemaker.employee.service.impl.HolidayServiceImpl;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

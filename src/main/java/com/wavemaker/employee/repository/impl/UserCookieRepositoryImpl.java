@@ -2,14 +2,17 @@ package com.wavemaker.employee.repository.impl;
 
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.repository.UserCookieRepository;
-import com.wavemaker.employee.util.DBConnector;
+import com.wavemaker.employee.util.DBConfig;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Repository("userCookieRepositoryInDB")
 public class UserCookieRepositoryImpl implements UserCookieRepository {
 
     private static final String GET_EMPLOYEE_ID = "SELECT EMP_ID FROM EMPLOYEE_COOKIES" +
@@ -21,11 +24,8 @@ public class UserCookieRepositoryImpl implements UserCookieRepository {
     private static final String DELETE_USER_COOKIE = "DELETE FROM EMPLOYEE_COOKIES " +
             "WHERE COOKIE_VALUE = ?";
 
-    private static Connection connection;
-
-    public UserCookieRepositoryImpl() throws SQLException {
-        connection = DBConnector.getConnectionInstance();
-    }
+    @Autowired
+    private Connection connection;
 
     @Override
     public boolean addCookie(String cookieValue, int userId) throws ServerUnavilableException {

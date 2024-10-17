@@ -21,6 +21,7 @@ public class DBConfig {
 
     @Bean
     public Connection getDBConnectionInstance() throws SQLException {
+        Connection connection = null;
         try {
             DriverManager.registerDriver(new Driver());
             logger.info("Database connection established successfully.");

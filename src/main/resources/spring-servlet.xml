@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+
+  http://www.springframework.org/schema/context
+
+
+  http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--    <import resource="config/hibernate.cfg.xml"/>--> <!--to import other xml -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.wavemaker.employee"/>
+    <bean name="userCookieServiceBean" class="com.wavemaker.employee.service.impl.UserCookieServiceImpl"/>
+    <bean name="userEntityServiceBean" class="com.wavemaker.employee.service.impl.UserEntityServiceImpl"/>
+    <bean name="employeeServiceBean" class="com.wavemaker.employee.service.impl.EmployeeServiceImpl"/>
+</beans>

@@ -3,35 +3,30 @@ package com.wavemaker.employee.repository.impl;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.Holiday;
 import com.wavemaker.employee.repository.HolidayRepository;
-import com.wavemaker.employee.util.DBConnector;
+import com.wavemaker.employee.util.DBConfig;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Repository("holidayRepositoryInDB")
 public class HolidayRepositoryImpl implements HolidayRepository {
-    private Connection connection;
-
     private static final String INSERT_HOLIDAY_QUERY = "INSERT INTO HOLIDAYS " +
             "(NAME, HOLIDAY_DATE, DESCRIPTION) VALUES (?, ?, ?)";
-
     private static final String SELECT_ALL_HOLIDAYS_QUERY =
             "SELECT HOLIDAY_ID, NAME, HOLIDAY_DATE, DESCRIPTION FROM HOLIDAYS";
-
     private static final String SELECT_HOLIDAY_BY_ID_QUERY =
             "SELECT HOLIDAY_ID, NAME, HOLIDAY_DATE, DESCRIPTION FROM HOLIDAYS WHERE HOLIDAY_ID = ?";
-
     private static final String DATE_FROM_HOLIDAYS_QUERY = "SELECT HOLIDAY_DATE FROM HOLIDAYS";
-
     private static final String SELECT_UPCOMING_HOLIDAY_LIST = "SELECT HOLIDAY_ID, NAME, HOLIDAY_DATE, DESCRIPTION " +
             "FROM holidays WHERE HOLIDAY_DATE >= CURDATE()";
 
-
-    public HolidayRepositoryImpl() throws SQLException {
-        connection = DBConnector.getConnectionInstance();
-    }
+    @Autowired
+    private Connection connection;
 
     public Holiday addHoliday(Holiday holiday) throws ServerUnavilableException {
         try {

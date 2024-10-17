@@ -3,11 +3,13 @@ package com.wavemaker.employee.repository.impl;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserEntityRepository;
-import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 
+@Repository("userEntityRepositoryInDB")
 public class UserEntityRepositoryImpl implements UserEntityRepository {
 
     private static final String SEARCH_USER = "SELECT * FROM EMPLOYEE_PASSWORD " +
@@ -19,11 +21,8 @@ public class UserEntityRepositoryImpl implements UserEntityRepository {
     private static final String INSERT_QUERY = "INSERT INTO EMPLOYEE_PASSWORD " +
             "(EMP_ID, EMAIL_ID, PASSWORD) VALUES (?, ?, ?)";
 
-    private static Connection connection;
-
-    public UserEntityRepositoryImpl() throws SQLException {
-        connection = DBConnector.getConnectionInstance();
-    }
+    @Autowired
+    private Connection connection;
 
     @Override
     public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavilableException {

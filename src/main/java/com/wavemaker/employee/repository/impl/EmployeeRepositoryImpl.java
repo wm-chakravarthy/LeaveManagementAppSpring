@@ -4,13 +4,16 @@ import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.Employee;
 import com.wavemaker.employee.pojo.dto.EmployeeVO;
 import com.wavemaker.employee.repository.EmployeeRepository;
-import com.wavemaker.employee.util.DBConnector;
+import com.wavemaker.employee.util.DBConfig;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository("employeeRepositoryInDB")
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     private static final String SELECT_EMPLOYEE_AND_MANAGER_QUERY =
@@ -38,11 +41,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                     "FROM EMPLOYEE e1 " +
                     "JOIN EMPLOYEE e2 ON e1.MANAGER_ID = e2.EMP_ID";
 
-    private Connection connection = null;
-
-    public EmployeeRepositoryImpl() throws SQLException {
-        connection = DBConnector.getConnectionInstance();
-    }
+    @Autowired
+    private Connection connection;
 
     public EmployeeVO getEmployeeById(int empId) throws ServerUnavilableException {
         EmployeeVO employee = null;
@@ -95,7 +95,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             }
             return employee;
         } catch (SQLException e) {
-           throw new ServerUnavilableException("Unable to create employee", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavilableException("Unable to create employee", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -112,7 +112,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             preparedStatement.executeUpdate();
             return employee;
         } catch (SQLException e) {
-           throw new ServerUnavilableException("Unable to Update Employee Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavilableException("Unable to Update Employee Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -168,7 +168,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 managers.add(manager);
             }
         } catch (SQLException e) {
-           throw new ServerUnavilableException("Unable to Get Manager Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavilableException("Unable to Get Manager Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return managers;
     }

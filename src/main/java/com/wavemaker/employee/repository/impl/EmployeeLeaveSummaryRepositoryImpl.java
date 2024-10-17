@@ -4,8 +4,9 @@ import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
 import com.wavemaker.employee.repository.EmployeeLeaveSummaryRepository;
-import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Repository("employeeLeaveSummaryRepositoryInDB")
 public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryRepository {
 
     private static final String SQL_SELECT_EMPLOYEE_LEAVE_SUMMARY =
@@ -44,11 +46,8 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
             "LAST_UPDATED = CURRENT_TIMESTAMP " +
             "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
 
+    @Autowired
     private Connection connection;
-
-    public EmployeeLeaveSummaryRepositoryImpl() throws SQLException {
-        this.connection = DBConnector.getConnectionInstance();
-    }
 
     @Override
     public boolean updateEmployeeLeaveSummary(int empId, int leaveTypeId, int totalDays) throws ServerUnavilableException {

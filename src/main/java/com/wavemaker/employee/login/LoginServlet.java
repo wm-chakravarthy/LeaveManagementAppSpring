@@ -8,9 +8,6 @@ import com.wavemaker.employee.pojo.dto.EmployeeVO;
 import com.wavemaker.employee.service.EmployeeService;
 import com.wavemaker.employee.service.UserCookieService;
 import com.wavemaker.employee.service.UserEntityService;
-import com.wavemaker.employee.service.impl.EmployeeServiceImpl;
-import com.wavemaker.employee.service.impl.UserCookieServiceImpl;
-import com.wavemaker.employee.service.impl.UserEntityServiceImpl;
 import com.wavemaker.employee.util.ClientResponseHandler;
 import com.wavemaker.employee.util.CookieHandler;
 import jakarta.servlet.ServletConfig;
@@ -22,31 +19,36 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.sql.SQLException;
 import java.util.UUID;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+
+    private static ApplicationContext applicationContext;
+
     private static final Logger logger = LoggerFactory.getLogger(LoginServlet.class);
-    private static UserEntityService userEntityService = null;
+
+    private UserEntityService userEntityService;
+
     private static Gson gson = null;
-    private static UserCookieService userCookieService = null;
-    private EmployeeService employeeService = null;
+
+    private UserCookieService userCookieService;
+
+    private EmployeeService employeeService;
 
     @Override
     public void init(ServletConfig config) {
-        try {
-            gson = new Gson();
-            userEntityService = new UserEntityServiceImpl();
-            userCookieService = new UserCookieServiceImpl();
-            employeeService = new EmployeeServiceImpl();
-        } catch (SQLException e) {
-            logger.error("Exception : ", e);
-        }
+        applicationContext = new ClassPathXmlApplicationContext("spring-servlet.xml");
+        userEntityService = (UserEntityService) applicationContext.getBean("userEntityServiceBean");
+        userCookieService = (UserCookieService) applicationContext.getBean("userCookieServiceBean");
+        employeeService = (EmployeeService) applicationContext.getBean("employeeServiceBean");
+        gson = new Gson();
     }
 
     @Override
