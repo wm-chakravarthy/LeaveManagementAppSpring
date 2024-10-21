@@ -2,9 +2,8 @@ package com.wavemaker.employee.repository.impl;
 
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.repository.UserCookieRepository;
-import com.wavemaker.employee.util.DBConfig;
+import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -24,8 +23,15 @@ public class UserCookieRepositoryImpl implements UserCookieRepository {
     private static final String DELETE_USER_COOKIE = "DELETE FROM EMPLOYEE_COOKIES " +
             "WHERE COOKIE_VALUE = ?";
 
-    @Autowired
     private Connection connection;
+
+    public UserCookieRepositoryImpl() {
+        try {
+            connection = DBConnector.getConnectionInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean addCookie(String cookieValue, int userId) throws ServerUnavilableException {

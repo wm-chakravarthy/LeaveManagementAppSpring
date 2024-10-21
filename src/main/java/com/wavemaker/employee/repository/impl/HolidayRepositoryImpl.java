@@ -3,9 +3,8 @@ package com.wavemaker.employee.repository.impl;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.Holiday;
 import com.wavemaker.employee.repository.HolidayRepository;
-import com.wavemaker.employee.util.DBConfig;
+import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -25,8 +24,15 @@ public class HolidayRepositoryImpl implements HolidayRepository {
     private static final String SELECT_UPCOMING_HOLIDAY_LIST = "SELECT HOLIDAY_ID, NAME, HOLIDAY_DATE, DESCRIPTION " +
             "FROM holidays WHERE HOLIDAY_DATE >= CURDATE()";
 
-    @Autowired
     private Connection connection;
+
+    public HolidayRepositoryImpl() {
+        try {
+            connection = DBConnector.getConnectionInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Holiday addHoliday(Holiday holiday) throws ServerUnavilableException {
         try {

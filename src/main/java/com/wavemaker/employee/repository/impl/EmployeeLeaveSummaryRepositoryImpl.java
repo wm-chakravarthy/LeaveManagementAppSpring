@@ -4,8 +4,8 @@ import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
 import com.wavemaker.employee.repository.EmployeeLeaveSummaryRepository;
+import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -24,30 +24,31 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
             "SELECT SUMMARY_ID, EMP_ID, LEAVE_TYPE_ID, LEAVE_TYPE, PENDING_LEAVES, TOTAL_LEAVES_TAKEN, LAST_UPDATED " +
                     "FROM employee_leave_summary " +
                     "WHERE EMP_ID = ?";
-
     private static final String EMPLOYEES_QUERY = "SELECT `EMP_ID`, `NAME` " +
             "FROM `employee` " +
             "WHERE `MANAGER_ID` = ?";
-
     private static final String LEAVE_SUMMARIES_QUERY = "SELECT `SUMMARY_ID`, `EMP_ID`, `LEAVE_TYPE_ID`, `LEAVE_TYPE`, `PENDING_LEAVES`, `TOTAL_LEAVES_TAKEN`, `LAST_UPDATED` " +
             "FROM `employee_leave_summary` " +
             "WHERE `EMP_ID` = ?";
-
     private static final String QUERY_PENDING_LEAVES =
             "SELECT PENDING_LEAVES FROM employee_leave_summary WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
-
     private static final String CHECK_QUERY = "SELECT PENDING_LEAVES, TOTAL_LEAVES_TAKEN " +
             "FROM EMPLOYEE_LEAVE_SUMMARY " +
             "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
-
     private static final String UPDATE_QUERY = "UPDATE EMPLOYEE_LEAVE_SUMMARY " +
             "SET PENDING_LEAVES = PENDING_LEAVES - ?, " +
             "TOTAL_LEAVES_TAKEN = TOTAL_LEAVES_TAKEN + ?, " +
             "LAST_UPDATED = CURRENT_TIMESTAMP " +
             "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
-
-    @Autowired
     private Connection connection;
+
+    public EmployeeLeaveSummaryRepositoryImpl() {
+        try {
+            connection = DBConnector.getConnectionInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean updateEmployeeLeaveSummary(int empId, int leaveTypeId, int totalDays) throws ServerUnavilableException {

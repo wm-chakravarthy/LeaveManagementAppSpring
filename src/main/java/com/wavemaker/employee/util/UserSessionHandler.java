@@ -12,6 +12,7 @@ public class UserSessionHandler {
     public static UserEntity handleUserSessionAndReturnUserEntity(HttpServletRequest request, HttpServletResponse response, Logger logger) {
         Gson gson = new Gson();
         String jsonResponse = null;
+
         HttpSession session = null;
         UserEntity userEntity = null;
         session = request.getSession(true);

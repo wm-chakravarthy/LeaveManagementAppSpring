@@ -4,9 +4,8 @@ import com.wavemaker.employee.exception.LeaveDaysExceededException;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.LeaveType;
 import com.wavemaker.employee.repository.LeaveTypeRepository;
-import com.wavemaker.employee.util.DBConfig;
+import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -25,8 +24,15 @@ public class LeaveTypeRepositoryImpl implements LeaveTypeRepository {
     private static final String QUERY_GET_MAX_DAYS_ALLOWED = "SELECT MAX_LEAVE_DAYS_ALLOWED " +
             "FROM leave_type WHERE LEAVE_TYPE_ID = ?";
 
-    @Autowired
     private Connection connection;
+
+    public LeaveTypeRepositoryImpl() {
+        try {
+            connection = DBConnector.getConnectionInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public List<LeaveType> getAllLeaveTypes(String gender) throws ServerUnavilableException {

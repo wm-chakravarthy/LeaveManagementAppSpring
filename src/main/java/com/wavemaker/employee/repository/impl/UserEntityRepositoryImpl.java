@@ -3,8 +3,8 @@ package com.wavemaker.employee.repository.impl;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserEntityRepository;
+import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -21,8 +21,15 @@ public class UserEntityRepositoryImpl implements UserEntityRepository {
     private static final String INSERT_QUERY = "INSERT INTO EMPLOYEE_PASSWORD " +
             "(EMP_ID, EMAIL_ID, PASSWORD) VALUES (?, ?, ?)";
 
-    @Autowired
     private Connection connection;
+
+    public UserEntityRepositoryImpl() {
+        try {
+            connection = DBConnector.getConnectionInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavilableException {

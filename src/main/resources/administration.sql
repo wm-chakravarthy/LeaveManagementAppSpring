@@ -83,3 +83,15 @@ CREATE TABLE IF NOT EXISTS EMPLOYEE_COOKIES (
     EMP_ID INT NOT NULL,
     FOREIGN KEY (EMP_ID) REFERENCES EMPLOYEE(EMP_ID)
 );
+
+
+
+-- Database Initialization
+-- LEAVE_TYPE DATA
+INSERT INTO leave_type (LEAVE_TYPE, MAX_LEAVE_DAYS_ALLOWED, APPLICABLE_GENDER, DESCRIPTION)
+VALUES
+    ('Sick Leave', 10, 'BOTH', 'Leave granted for health issues.'),
+    ('Casual Leave', 5, 'BOTH', 'Leave taken for personal reasons.'),
+    ('Paternity Leave', 15, 'MALE', 'Leave for new fathers.'),
+    ('Maternity Leave', 180, 'FEMALE', 'Leave for new mothers.');
+

@@ -4,16 +4,18 @@ package com.wavemaker.employee.service.impl;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserEntityRepository;
+import com.wavemaker.employee.repository.impl.UserEntityRepositoryImpl;
 import com.wavemaker.employee.service.UserEntityService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class UserEntityServiceImpl implements UserEntityService {
 
-    @Autowired
-    @Qualifier("userEntityRepositoryInDB")
     private UserEntityRepository userEntityRepository;
+
+    public UserEntityServiceImpl() {
+        userEntityRepository = new UserEntityRepositoryImpl();
+    }
 
     @Override
     public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavilableException {

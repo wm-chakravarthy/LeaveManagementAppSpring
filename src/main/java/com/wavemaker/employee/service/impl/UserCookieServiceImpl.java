@@ -4,21 +4,23 @@ package com.wavemaker.employee.service.impl;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserCookieRepository;
+import com.wavemaker.employee.repository.impl.UserCookieRepositoryImpl;
 import com.wavemaker.employee.service.UserCookieService;
 import com.wavemaker.employee.service.UserEntityService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class UserCookieServiceImpl implements UserCookieService {
 
-    @Autowired
     private UserEntityService userEntityService;
 
-    @Autowired
-    @Qualifier("userCookieRepositoryInDB")
     private UserCookieRepository userCookieRepository;
+
+
+    public UserCookieServiceImpl() {
+        this.userEntityService = new UserEntityServiceImpl();
+        this.userCookieRepository = new UserCookieRepositoryImpl();
+    }
 
 
     @Override

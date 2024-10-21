@@ -4,11 +4,10 @@ import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.ServerUnavilableException;
 import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
 import com.wavemaker.employee.repository.MyTeamLeaveRepository;
-import com.wavemaker.employee.util.DBConfig;
+import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -39,8 +38,16 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
     private static final String ORDER_BY_QUERY =
             " ORDER BY CASE WHEN lr.LEAVE_STATUS = 'PENDING' THEN 1 ELSE 2 END, lr.DATE_OF_APPLICATION DESC";
     private static final Logger logger = LoggerFactory.getLogger(MyTeamLeaveRepositoryImpl.class);
-    @Autowired
+
     private Connection connection;
+
+    public MyTeamLeaveRepositoryImpl() {
+        try {
+            connection = DBConnector.getConnectionInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public List<LeaveRequestVO> getMyTeamLeaveRequests(int empId, List<String> statusList) throws ServerUnavilableException {
