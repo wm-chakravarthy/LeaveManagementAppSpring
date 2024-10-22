@@ -1,6 +1,6 @@
 package com.wavemaker.employee.util;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class DateUtil {
-    public static int calculateTotalDaysExcludingWeekendsAndHolidays(Date fromDate, Date toDate) throws ServerUnavilableException {
+    public static int calculateTotalDaysExcludingWeekendsAndHolidays(Date fromDate, Date toDate) throws ServerUnavailableException {
         LocalDate start = convertToLocalDate(fromDate);
         LocalDate end = convertToLocalDate(toDate);
 

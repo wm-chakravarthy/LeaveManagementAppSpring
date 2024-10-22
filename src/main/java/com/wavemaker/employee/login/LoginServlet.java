@@ -1,6 +1,6 @@
 package com.wavemaker.employee.login;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.pojo.dto.EmployeeVO;
 import com.wavemaker.employee.service.EmployeeService;
@@ -35,7 +35,7 @@ public class LoginServlet {
 
     @PostMapping
     public String login(@RequestBody UserEntity userEntity,
-                        HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException, IOException {
+                        HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException, IOException {
 
         logger.info("User details : {}", userEntity);
         UserEntity authenticatedUser = userEntityService.authenticateUser(userEntity);
@@ -57,7 +57,7 @@ public class LoginServlet {
     }
 
     @GetMapping
-    public EmployeeVO getLoggedInEmployee(HttpServletRequest httpServletRequest, HttpServletResponse response) throws ServerUnavilableException {
+    public EmployeeVO getLoggedInEmployee(HttpServletRequest httpServletRequest, HttpServletResponse response) throws ServerUnavailableException {
         EmployeeVO employeeVO = null;
         String cookieValue = CookieHandler.getCookieValueByCookieName("my_auth_cookie", httpServletRequest);
         UserEntity userEntity = null;

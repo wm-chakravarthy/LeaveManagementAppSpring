@@ -1,6 +1,6 @@
 package com.wavemaker.employee.service.impl;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.Holiday;
 import com.wavemaker.employee.repository.HolidayRepository;
 import com.wavemaker.employee.service.HolidayService;
@@ -19,32 +19,32 @@ public class HolidayServiceImpl implements HolidayService {
     private static HolidayRepository holidayRepository;
 
     @Override
-    public List<Holiday> getHolidayList() throws ServerUnavilableException {
+    public List<Holiday> getHolidayList() throws ServerUnavailableException {
         return holidayRepository.getHolidayList();
     }
 
     @Override
-    public Holiday getHolidayById(int holidayId) throws ServerUnavilableException {
+    public Holiday getHolidayById(int holidayId) throws ServerUnavailableException {
         return holidayRepository.getHolidayById(holidayId);
     }
 
     @Override
-    public Holiday addHoliday(Holiday holiday) throws ServerUnavilableException {
+    public Holiday addHoliday(Holiday holiday) throws ServerUnavailableException {
         return holidayRepository.addHoliday(holiday);
     }
 
     @Override
-    public List<Date> getListOfHolidayDates() throws ServerUnavilableException {
+    public List<Date> getListOfHolidayDates() throws ServerUnavailableException {
         return holidayRepository.getListOfHolidayDates();
     }
 
     @Override
-    public List<Date> getUpcomingHolidayDatesList() throws ServerUnavilableException {
+    public List<Date> getUpcomingHolidayDatesList() throws ServerUnavailableException {
         return holidayRepository.getUpcomingHolidayDatesList();
     }
 
     @Override
-    public List<Holiday> getUpcommingHolidayList() throws ServerUnavilableException {
+    public List<Holiday> getUpcommingHolidayList() throws ServerUnavailableException {
         return holidayRepository.getUpcommingHolidayList();
     }
 }

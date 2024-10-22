@@ -2,7 +2,7 @@ package com.wavemaker.employee.login;
 
 import com.google.gson.Gson;
 import com.wavemaker.employee.exception.ErrorResponse;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.service.UserCookieService;
 import com.wavemaker.employee.service.impl.UserCookieServiceImpl;
@@ -60,7 +60,7 @@ public class AuthenticationFilter implements Filter {
                 jsonResponse = gson.toJson(new ErrorResponse("Authentication required. Redirecting to login.", HttpServletResponse.SC_UNAUTHORIZED));
                 sendResponse(httpServletResponse, jsonResponse);
             }
-        } catch (ServerUnavilableException | ServletException | IOException e) {
+        } catch (ServerUnavailableException | ServletException | IOException e) {
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), 500);
             jsonResponse = gson.toJson(errorResponse);
         } finally {

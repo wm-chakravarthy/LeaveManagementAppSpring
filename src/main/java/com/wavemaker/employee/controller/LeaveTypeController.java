@@ -1,6 +1,6 @@
 package com.wavemaker.employee.controller;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveType;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.service.LeaveTypeService;
@@ -29,7 +29,7 @@ public class LeaveTypeController {
     @GetMapping("/list")
     public List<LeaveType> getLeaveTypes(
             @RequestParam(value = "gender", required = false) String gender,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException {
+            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
 
         UserEntity userEntity = null;
         List<LeaveType> leaveTypeList = null;

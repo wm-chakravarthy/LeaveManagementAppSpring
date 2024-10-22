@@ -1,6 +1,6 @@
 package com.wavemaker.employee.repository.impl;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.Holiday;
 import com.wavemaker.employee.repository.HolidayRepository;
 import com.wavemaker.employee.util.DBConnector;
@@ -34,7 +34,7 @@ public class HolidayRepositoryImpl implements HolidayRepository {
         }
     }
 
-    public Holiday addHoliday(Holiday holiday) throws ServerUnavilableException {
+    public Holiday addHoliday(Holiday holiday) throws ServerUnavailableException {
         try {
             PreparedStatement statement = connection.prepareStatement(INSERT_HOLIDAY_QUERY, Statement.RETURN_GENERATED_KEYS);
 
@@ -54,12 +54,12 @@ public class HolidayRepositoryImpl implements HolidayRepository {
             return holiday;
 
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error adding holiday", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error adding holiday", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public List<Date> getListOfHolidayDates() throws ServerUnavilableException {
+    public List<Date> getListOfHolidayDates() throws ServerUnavailableException {
         List<Date> holidayDates = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(DATE_FROM_HOLIDAYS_QUERY);
@@ -68,12 +68,12 @@ public class HolidayRepositoryImpl implements HolidayRepository {
                 holidayDates.add(resultSet.getDate("HOLIDAY_DATE"));
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error retrieving holiday dates", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error retrieving holiday dates", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return holidayDates;
     }
 
-    public List<Date> getUpcomingHolidayDatesList() throws ServerUnavilableException {
+    public List<Date> getUpcomingHolidayDatesList() throws ServerUnavailableException {
         List<Date> upcomingHolidays = new ArrayList<>();
         String query = "SELECT HOLIDAY_DATE FROM holidays WHERE HOLIDAY_DATE >= CURDATE()";
 
@@ -86,13 +86,13 @@ public class HolidayRepositoryImpl implements HolidayRepository {
                 upcomingHolidays.add(holidayDate);
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error retrieving upcoming holidays", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error retrieving upcoming holidays", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return upcomingHolidays;
     }
 
     @Override
-    public List<Holiday> getUpcommingHolidayList() throws ServerUnavilableException {
+    public List<Holiday> getUpcommingHolidayList() throws ServerUnavailableException {
         List<Holiday> upcomingHolidays = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_UPCOMING_HOLIDAY_LIST);
@@ -108,14 +108,14 @@ public class HolidayRepositoryImpl implements HolidayRepository {
             }
 
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error retrieving upcoming holidays", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error retrieving upcoming holidays", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return upcomingHolidays;
     }
 
 
     @Override
-    public List<Holiday> getHolidayList() throws ServerUnavilableException {
+    public List<Holiday> getHolidayList() throws ServerUnavailableException {
         List<Holiday> holidays = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_HOLIDAYS_QUERY);
@@ -129,13 +129,13 @@ public class HolidayRepositoryImpl implements HolidayRepository {
                 holidays.add(holiday);
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error retrieving holiday list", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error retrieving holiday list", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return holidays;
     }
 
     @Override
-    public Holiday getHolidayById(int holidayId) throws ServerUnavilableException {
+    public Holiday getHolidayById(int holidayId) throws ServerUnavailableException {
         try {
             PreparedStatement statement = connection.prepareStatement(SELECT_HOLIDAY_BY_ID_QUERY);
             statement.setInt(1, holidayId);
@@ -150,7 +150,7 @@ public class HolidayRepositoryImpl implements HolidayRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error retrieving holiday by ID", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error retrieving holiday by ID", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return null;
     }

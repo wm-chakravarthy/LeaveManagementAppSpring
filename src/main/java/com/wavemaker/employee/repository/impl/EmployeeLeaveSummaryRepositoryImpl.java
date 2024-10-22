@@ -1,6 +1,6 @@
 package com.wavemaker.employee.repository.impl;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
 import com.wavemaker.employee.repository.EmployeeLeaveSummaryRepository;
@@ -21,17 +21,17 @@ import java.util.Map;
 public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryRepository {
 
     private static final String SQL_SELECT_EMPLOYEE_LEAVE_SUMMARY =
-            "SELECT SUMMARY_ID, EMP_ID, LEAVE_TYPE_ID, LEAVE_TYPE, PENDING_LEAVES, TOTAL_LEAVES_TAKEN, LAST_UPDATED " +
-                    "FROM employee_leave_summary " +
+            "SELECT SUMMARY_ID, EMP_ID, LEAVE_TYPE_ID, PENDING_LEAVES, TOTAL_LEAVES_TAKEN, LAST_UPDATED " +
+                    "FROM EMPLOYEE_LEAVE_SUMMARY " +
                     "WHERE EMP_ID = ?";
     private static final String EMPLOYEES_QUERY = "SELECT `EMP_ID`, `NAME` " +
-            "FROM `employee` " +
+            "FROM `EMPLOYEE` " +
             "WHERE `MANAGER_ID` = ?";
-    private static final String LEAVE_SUMMARIES_QUERY = "SELECT `SUMMARY_ID`, `EMP_ID`, `LEAVE_TYPE_ID`, `LEAVE_TYPE`, `PENDING_LEAVES`, `TOTAL_LEAVES_TAKEN`, `LAST_UPDATED` " +
-            "FROM `employee_leave_summary` " +
+    private static final String LEAVE_SUMMARIES_QUERY = "SELECT `SUMMARY_ID`, `EMP_ID`, `LEAVE_TYPE_ID`, `PENDING_LEAVES`, `TOTAL_LEAVES_TAKEN`, `LAST_UPDATED` " +
+            "FROM `EMPLOYEE_LEAVE_SUMMARY` " +
             "WHERE `EMP_ID` = ?";
     private static final String QUERY_PENDING_LEAVES =
-            "SELECT PENDING_LEAVES FROM employee_leave_summary WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
+            "SELECT PENDING_LEAVES FROM EMPLOYEE_LEAVE_SUMMARY WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
     private static final String CHECK_QUERY = "SELECT PENDING_LEAVES, TOTAL_LEAVES_TAKEN " +
             "FROM EMPLOYEE_LEAVE_SUMMARY " +
             "WHERE EMP_ID = ? AND LEAVE_TYPE_ID = ?";
@@ -51,7 +51,7 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
     }
 
     @Override
-    public boolean updateEmployeeLeaveSummary(int empId, int leaveTypeId, int totalDays) throws ServerUnavilableException {
+    public boolean updateEmployeeLeaveSummary(int empId, int leaveTypeId, int totalDays) throws ServerUnavailableException {
         PreparedStatement checkStmt = null;
         PreparedStatement updateStmt = null;
         ResultSet rs = null;
@@ -74,13 +74,13 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
                 return false;
             }
         } catch (Exception e) {
-            throw new ServerUnavilableException("Could not update employee leave summary", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Could not update employee leave summary", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
 
     @Override
-    public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(int empId) throws ServerUnavilableException {
+    public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(int empId) throws ServerUnavailableException {
         List<EmployeeLeaveSummary> summaries = new ArrayList<>();
 
         PreparedStatement preparedStatement = null;
@@ -97,7 +97,6 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
                 summary.summaryId = resultSet.getInt("SUMMARY_ID");
                 summary.empId = resultSet.getInt("EMP_ID");
                 summary.leaveTypeId = resultSet.getInt("LEAVE_TYPE_ID");
-                summary.leaveType = resultSet.getString("LEAVE_TYPE");
                 summary.pendingLeaves = resultSet.getInt("PENDING_LEAVES");
                 summary.totalLeavesTaken = resultSet.getInt("TOTAL_LEAVES_TAKEN");
                 summary.lastUpdated = resultSet.getTimestamp("LAST_UPDATED");
@@ -105,14 +104,14 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
                 summaries.add(summary); // Add each summary to the list
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error fetching employee leave summary", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error fetching employee leave summary", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
         return summaries;
     }
 
     @Override
-    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(int managerId) throws ServerUnavilableException {
+    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(int managerId) throws ServerUnavailableException {
         try {
             PreparedStatement employeesStatement = connection.prepareStatement(EMPLOYEES_QUERY);
             employeesStatement.setInt(1, managerId);
@@ -137,7 +136,6 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
                     summary.summaryId = leaveSummariesResultSet.getInt("SUMMARY_ID");
                     summary.empId = empId;
                     summary.leaveTypeId = leaveSummariesResultSet.getInt("LEAVE_TYPE_ID");
-                    summary.leaveType = leaveSummariesResultSet.getString("LEAVE_TYPE");
                     summary.pendingLeaves = leaveSummariesResultSet.getInt("PENDING_LEAVES");
                     summary.totalLeavesTaken = leaveSummariesResultSet.getInt("TOTAL_LEAVES_TAKEN");
                     summary.lastUpdated = leaveSummariesResultSet.getTimestamp("LAST_UPDATED");
@@ -150,12 +148,12 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
 
             return resultMap;
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error fetching all employee leave summaries", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error fetching all employee leave summaries", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public boolean isLeaveTypeWithinRange(int empId, int leaveTypeId, int totalDays) throws ServerUnavilableException {
+    public boolean isLeaveTypeWithinRange(int empId, int leaveTypeId, int totalDays) throws ServerUnavailableException {
         try {
             PreparedStatement statement = connection.prepareStatement(QUERY_PENDING_LEAVES);
             statement.setInt(1, empId);
@@ -170,7 +168,7 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error checking leave type range", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error checking leave type range", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

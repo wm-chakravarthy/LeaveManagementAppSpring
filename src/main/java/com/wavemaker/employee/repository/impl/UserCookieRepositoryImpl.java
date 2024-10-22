@@ -1,6 +1,6 @@
 package com.wavemaker.employee.repository.impl;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.repository.UserCookieRepository;
 import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,7 +34,7 @@ public class UserCookieRepositoryImpl implements UserCookieRepository {
     }
 
     @Override
-    public boolean addCookie(String cookieValue, int userId) throws ServerUnavilableException {
+    public boolean addCookie(String cookieValue, int userId) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COOKIE_SQL);
             String cookieName = "my_auth_cookie"; //default cookie name
@@ -45,13 +45,13 @@ public class UserCookieRepositoryImpl implements UserCookieRepository {
             int rowsInserted = preparedStatement.executeUpdate();
             return rowsInserted > 0;
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Failed to add cookie due to a database error.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Failed to add cookie due to a database error.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
 
     @Override
-    public int getUserIdByCookieValue(String cookieValue) throws ServerUnavilableException {
+    public int getUserIdByCookieValue(String cookieValue) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_EMPLOYEE_ID);
             preparedStatement.setString(1, cookieValue);
@@ -62,19 +62,19 @@ public class UserCookieRepositoryImpl implements UserCookieRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Failed to retrieve user ID by cookie value.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Failed to retrieve user ID by cookie value.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return -1;
     }
 
     @Override
-    public boolean deleteUserCookie(String cookieValue) throws ServerUnavilableException {
+    public boolean deleteUserCookie(String cookieValue) throws ServerUnavailableException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_COOKIE)) {
             preparedStatement.setString(1, cookieValue);
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Failed to delete user cookie.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Failed to delete user cookie.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

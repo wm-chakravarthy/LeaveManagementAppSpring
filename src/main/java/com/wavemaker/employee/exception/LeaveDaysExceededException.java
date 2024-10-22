@@ -1,6 +1,6 @@
 package com.wavemaker.employee.exception;
 
-public class LeaveDaysExceededException extends Exception {
+public class LeaveDaysExceededException extends RuntimeException {
     private int statusCode;
     private String errorMessage;
 

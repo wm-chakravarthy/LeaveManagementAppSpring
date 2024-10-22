@@ -1,6 +1,6 @@
 package com.wavemaker.employee.controller;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.Holiday;
 import com.wavemaker.employee.service.HolidayService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class HolidayController {
     @GetMapping
     public Holiday getHolidayById(
             @RequestParam(value = "holidayId", required = false) String holidayId,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException {
+            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
 
         logger.info("Fetching holiday details for holidayId: {}", holidayId);
         Holiday holiday = null;
@@ -39,7 +39,7 @@ public class HolidayController {
     }
 
     @GetMapping("/upcoming")
-    public List<Holiday> getUpcommingHolidayList() throws ServerUnavilableException {
+    public List<Holiday> getUpcommingHolidayList() throws ServerUnavailableException {
         List<Holiday> holidayList = null;
         logger.info("Fetching upcoming holidays");
         holidayList = holidayService.getUpcommingHolidayList();

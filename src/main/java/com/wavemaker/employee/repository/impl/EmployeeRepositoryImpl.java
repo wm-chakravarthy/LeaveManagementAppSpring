@@ -1,6 +1,6 @@
 package com.wavemaker.employee.repository.impl;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.Employee;
 import com.wavemaker.employee.pojo.dto.EmployeeVO;
 import com.wavemaker.employee.repository.EmployeeRepository;
@@ -44,7 +44,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }
     }
 
-    public EmployeeVO getEmployeeById(int empId) throws ServerUnavilableException {
+    public EmployeeVO getEmployeeById(int empId) throws ServerUnavailableException {
         EmployeeVO employee = null;
 
         try {
@@ -69,14 +69,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to get the Employee details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to get the Employee details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
         return employee;
     }
 
     @Override
-    public Employee addEmployee(Employee employee) throws ServerUnavilableException {
+    public Employee addEmployee(Employee employee) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(ADD_EMPLOYEE_QUERY, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, employee.getManagerId());
@@ -95,12 +95,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             }
             return employee;
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to create employee", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to create employee", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public Employee updateEmployee(Employee employee) throws ServerUnavilableException {
+    public Employee updateEmployee(Employee employee) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EMPLOYEE_QUERY);
             preparedStatement.setInt(1, employee.getManagerId());
@@ -112,24 +112,24 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             preparedStatement.executeUpdate();
             return employee;
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to Update Employee Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to Update Employee Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public Employee deleteEmployee(int empId) throws ServerUnavilableException {
+    public Employee deleteEmployee(int empId) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EMPLOYEE_QUERY);
             preparedStatement.setInt(1, empId);
             preparedStatement.executeUpdate();
             return null;  // Return the deleted employee information if needed.
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to delete employee details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to delete employee details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public List<Employee> getEmployees() throws ServerUnavilableException {
+    public List<Employee> getEmployees() throws ServerUnavailableException {
         List<Employee> employees = new ArrayList<>();
         try {
 
@@ -146,13 +146,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 employees.add(employee);
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to Get Employee Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to Get Employee Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return employees;
     }
 
     @Override
-    public List<Employee> getAllManagers() throws ServerUnavilableException {
+    public List<Employee> getAllManagers() throws ServerUnavailableException {
         List<Employee> managers = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_MANAGERS_QUERY);
@@ -168,7 +168,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 managers.add(manager);
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to Get Manager Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to Get Manager Details", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return managers;
     }

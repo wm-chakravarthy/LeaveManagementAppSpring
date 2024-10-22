@@ -1,7 +1,7 @@
 package com.wavemaker.employee.controller;
 
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveRequest;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.pojo.dto.EmployeeLeaveRequestVO;
@@ -30,7 +30,7 @@ public class MyLeavesController {
     @GetMapping
     public List<EmployeeLeaveRequestVO> getMyLeaveRequests(
             @RequestParam(value = "status", required = false) String status,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException {
+            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
 
         List<EmployeeLeaveRequestVO> employeeLeaveRequestVOList = null;
         UserEntity userEntity = null;
@@ -53,7 +53,7 @@ public class MyLeavesController {
     @PatchMapping
     public boolean cancelMyLeaveRequest(
             @RequestParam(value = "leaveRequestId", required = false) String leaveRequestId,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException {
+            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
 
         LeaveRequest leaveRequest = null;
         UserEntity userEntity = null;
@@ -71,7 +71,7 @@ public class MyLeavesController {
     @PostMapping
     public LeaveRequest applyForLeave(@RequestBody LeaveRequest leaveRequest,
                                       HttpServletRequest request, HttpServletResponse response)
-            throws ServerUnavilableException, LeaveDaysExceededException {
+            throws ServerUnavailableException, LeaveDaysExceededException {
 
         UserEntity userEntity = null;
         userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
@@ -86,7 +86,7 @@ public class MyLeavesController {
     @PutMapping
     public LeaveRequest updateMyLeaveRequest(@RequestBody LeaveRequest leaveRequest,
                                              HttpServletRequest request, HttpServletResponse response)
-            throws ServerUnavilableException {
+            throws ServerUnavailableException {
 
         UserEntity userEntity = null;
         userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);

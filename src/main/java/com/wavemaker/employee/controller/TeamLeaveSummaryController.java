@@ -1,6 +1,6 @@
 package com.wavemaker.employee.controller;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
@@ -31,7 +31,7 @@ public class TeamLeaveSummaryController {
     @GetMapping
     public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(
             @RequestParam(value = "empId", required = false) String empId,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException {
+            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
 
         List<EmployeeLeaveSummary> employeeLeaveSummaryList = null;
         logger.info("Fetching leave summary for employee ID: {}", empId);
@@ -41,13 +41,14 @@ public class TeamLeaveSummaryController {
     }
 
     @GetMapping("/list")
-    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException {
+    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
         Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> leaveSummaryMap = null;
         UserEntity userEntity = null;
 
         userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
+        logger.info("Fetching leave summary for employee : {}", userEntity);
         leaveSummaryMap = employeeLeaveSummaryService.getAllEmployeesLeaveSummary(userEntity.getEmpId());
-
+        logger.info("Leave summary fetched: {}", leaveSummaryMap);
         return leaveSummaryMap;
     }
 }

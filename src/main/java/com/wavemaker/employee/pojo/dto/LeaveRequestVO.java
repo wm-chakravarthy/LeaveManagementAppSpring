@@ -10,7 +10,6 @@ public class LeaveRequestVO {
     private int empId;
     private String empName;
     private int leaveTypeId;
-    private String leaveType;
     private String leaveReason;
     private Date fromDate;
     private Date toDate;
@@ -83,14 +82,6 @@ public class LeaveRequestVO {
         this.dateOfApplication = dateOfApplication;
     }
 
-    public String getLeaveType() {
-        return leaveType;
-    }
-
-    public void setLeaveType(String leaveType) {
-        this.leaveType = leaveType;
-    }
-
     public LeaveRequestStatus getLeaveRequestStatus() {
         return leaveRequestStatus;
     }
@@ -128,12 +119,12 @@ public class LeaveRequestVO {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         LeaveRequestVO that = (LeaveRequestVO) object;
-        return leaveRequestId == that.leaveRequestId && empId == that.empId && leaveTypeId == that.leaveTypeId && Objects.equals(empName, that.empName) && Objects.equals(leaveType, that.leaveType) && Objects.equals(leaveReason, that.leaveReason) && Objects.equals(fromDate, that.fromDate) && Objects.equals(toDate, that.toDate) && Objects.equals(dateOfApplication, that.dateOfApplication) && leaveRequestStatus == that.leaveRequestStatus && Objects.equals(dateOfApproved, that.dateOfApproved);
+        return leaveRequestId == that.leaveRequestId && empId == that.empId && leaveTypeId == that.leaveTypeId && Objects.equals(empName, that.empName) && Objects.equals(leaveReason, that.leaveReason) && Objects.equals(fromDate, that.fromDate) && Objects.equals(toDate, that.toDate) && Objects.equals(dateOfApplication, that.dateOfApplication) && leaveRequestStatus == that.leaveRequestStatus && Objects.equals(dateOfApproved, that.dateOfApproved);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(leaveRequestId, empId, empName, leaveTypeId, leaveType, leaveReason, fromDate, toDate, dateOfApplication, leaveRequestStatus, dateOfApproved);
+        return Objects.hash(leaveRequestId, empId, empName, leaveTypeId, leaveReason, fromDate, toDate, dateOfApplication, leaveRequestStatus, dateOfApproved);
     }
 
     @Override
@@ -143,7 +134,6 @@ public class LeaveRequestVO {
                 ", empId=" + empId +
                 ", empName='" + empName + '\'' +
                 ", leaveTypeId=" + leaveTypeId +
-                ", leaveType='" + leaveType + '\'' +
                 ", leaveReason='" + leaveReason + '\'' +
                 ", fromDate=" + fromDate +
                 ", toDate=" + toDate +

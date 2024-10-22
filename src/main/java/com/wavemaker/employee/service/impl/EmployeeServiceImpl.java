@@ -1,6 +1,6 @@
 package com.wavemaker.employee.service.impl;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.Employee;
 import com.wavemaker.employee.pojo.dto.EmployeeVO;
 import com.wavemaker.employee.repository.EmployeeRepository;
@@ -19,32 +19,32 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public EmployeeVO getEmployeeById(int empId) throws ServerUnavilableException {
+    public EmployeeVO getEmployeeById(int empId) throws ServerUnavailableException {
         return employeeRepository.getEmployeeById(empId);
     }
 
     @Override
-    public Employee addEmployee(Employee employee) throws ServerUnavilableException {
+    public Employee addEmployee(Employee employee) throws ServerUnavailableException {
         return employeeRepository.addEmployee(employee);
     }
 
     @Override
-    public Employee updateEmployee(Employee employee) throws ServerUnavilableException {
+    public Employee updateEmployee(Employee employee) throws ServerUnavailableException {
         return employeeRepository.updateEmployee(employee);
     }
 
     @Override
-    public Employee deleteEmployee(int empId) throws ServerUnavilableException {
+    public Employee deleteEmployee(int empId) throws ServerUnavailableException {
         return employeeRepository.deleteEmployee(empId);
     }
 
     @Override
-    public List<Employee> getEmployees() throws ServerUnavilableException {
+    public List<Employee> getEmployees() throws ServerUnavailableException {
         return employeeRepository.getEmployees();
     }
 
     @Override
-    public List<Employee> getAllManagers() throws ServerUnavilableException {
+    public List<Employee> getAllManagers() throws ServerUnavailableException {
         return employeeRepository.getAllManagers();
     }
 }

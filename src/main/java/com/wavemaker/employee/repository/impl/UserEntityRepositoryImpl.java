@@ -1,6 +1,6 @@
 package com.wavemaker.employee.repository.impl;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserEntityRepository;
 import com.wavemaker.employee.util.DBConnector;
@@ -32,7 +32,7 @@ public class UserEntityRepositoryImpl implements UserEntityRepository {
     }
 
     @Override
-    public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavilableException {
+    public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavailableException {
         String email = userEntity.getEmail();
         String password = userEntity.getPassword();
 
@@ -52,12 +52,12 @@ public class UserEntityRepositoryImpl implements UserEntityRepository {
                 return null;
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to authenticate the user", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to authenticate the user", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public UserEntity getUserEntityById(int empId) throws ServerUnavilableException {
+    public UserEntity getUserEntityById(int empId) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID_SQL);
             preparedStatement.setInt(1, empId);
@@ -74,13 +74,13 @@ public class UserEntityRepositoryImpl implements UserEntityRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Failed to retrieve user entity by ID.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Failed to retrieve user entity by ID.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return null;
     }
 
     @Override
-    public UserEntity addUserEntity(UserEntity userEntity) throws ServerUnavilableException {
+    public UserEntity addUserEntity(UserEntity userEntity) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, userEntity.getUserId()); // Assuming 'userId' maps to 'EMP_ID'
@@ -90,20 +90,20 @@ public class UserEntityRepositoryImpl implements UserEntityRepository {
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new ServerUnavilableException("Creating user failed, no rows affected.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                throw new ServerUnavailableException("Creating user failed, no rows affected.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
 
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if (resultSet.next()) {
                     userEntity.setUserId(resultSet.getInt(1)); // Assuming the ID generated is mapped to 'EMP_ID'
                 } else {
-                    throw new ServerUnavilableException("Creating user failed, no ID obtained.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    throw new ServerUnavailableException("Creating user failed, no ID obtained.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
             }
 
             return userEntity;
         } catch (Exception e) {
-            throw new ServerUnavilableException("Server is unavailable. Unable to add user entity.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Server is unavailable. Unable to add user entity.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

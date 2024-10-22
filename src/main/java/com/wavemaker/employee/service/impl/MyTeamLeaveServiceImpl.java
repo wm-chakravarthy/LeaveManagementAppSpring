@@ -2,7 +2,7 @@ package com.wavemaker.employee.service.impl;
 
 import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
 import com.wavemaker.employee.repository.MyTeamLeaveRepository;
 import com.wavemaker.employee.service.EmployeeLeaveSummaryService;
@@ -29,12 +29,12 @@ public class MyTeamLeaveServiceImpl implements MyTeamLeaveService {
     private EmployeeLeaveSummaryService employeeLeaveSummaryService;
 
     @Override
-    public List<LeaveRequestVO> getMyTeamLeaveRequests(int managerEmpId, List<String> statusList) throws ServerUnavilableException {
+    public List<LeaveRequestVO> getMyTeamLeaveRequests(int managerEmpId, List<String> statusList) throws ServerUnavailableException {
         return myTeamLeaveRepository.getMyTeamLeaveRequests(managerEmpId, statusList);
     }
 
     @Override
-    public boolean approveOrRejectTeamLeaveRequest(int leaveRequestId, int approvingEmpId, LeaveRequestStatus approveOrRejectOrCancel) throws ServerUnavilableException, LeaveDaysExceededException {
+    public boolean approveOrRejectTeamLeaveRequest(int leaveRequestId, int approvingEmpId, LeaveRequestStatus approveOrRejectOrCancel) throws ServerUnavailableException, LeaveDaysExceededException {
         Integer totalDays = -1;
         Integer leaveTypeId = -1;
         int empId = myLeaveService.getEmployeeIdByLeaveRequestId(leaveRequestId);
@@ -42,7 +42,7 @@ public class MyTeamLeaveServiceImpl implements MyTeamLeaveService {
             List<Integer> leaveTypeData = myLeaveService.getLeaveTypeIdAndTotalDaysByLeaveRequestId(leaveRequestId);
 
             if (leaveTypeData.size() < 2) {
-                throw new ServerUnavilableException("Incomplete leave type data found for the given leave request ID.", HttpServletResponse.SC_BAD_REQUEST);
+                throw new ServerUnavailableException("Incomplete leave type data found for the given leave request ID.", HttpServletResponse.SC_BAD_REQUEST);
             }
             leaveTypeId = leaveTypeData.get(0);
             totalDays = leaveTypeData.get(1);

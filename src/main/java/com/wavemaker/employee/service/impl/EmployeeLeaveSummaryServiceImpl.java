@@ -1,7 +1,7 @@
 package com.wavemaker.employee.service.impl;
 
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
 import com.wavemaker.employee.repository.EmployeeLeaveSummaryRepository;
@@ -21,22 +21,22 @@ public class EmployeeLeaveSummaryServiceImpl implements EmployeeLeaveSummaryServ
     private EmployeeLeaveSummaryRepository employeeLeaveSummaryRepository;
 
     @Override
-    public boolean updateEmployeeLeaveSummary(int empId, int leaveTypeId, int totalDays) throws ServerUnavilableException {
+    public boolean updateEmployeeLeaveSummary(int empId, int leaveTypeId, int totalDays) throws ServerUnavailableException {
         return employeeLeaveSummaryRepository.updateEmployeeLeaveSummary(empId, leaveTypeId, totalDays);
     }
 
     @Override
-    public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(int empId) throws ServerUnavilableException {
+    public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(int empId) throws ServerUnavailableException {
         return employeeLeaveSummaryRepository.getEmployeeLeaveSummariesById(empId);
     }
 
     @Override
-    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(int empId) throws ServerUnavilableException {
+    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(int empId) throws ServerUnavailableException {
         return employeeLeaveSummaryRepository.getAllEmployeesLeaveSummary(empId);
     }
 
     @Override
-    public boolean isLeaveTypeWithinRange(int empId, int leaveTypeId, int totalDays) throws LeaveDaysExceededException, ServerUnavilableException {
+    public boolean isLeaveTypeWithinRange(int empId, int leaveTypeId, int totalDays) throws LeaveDaysExceededException, ServerUnavailableException {
         return employeeLeaveSummaryRepository.isLeaveTypeWithinRange(empId, leaveTypeId, totalDays);
     }
 }

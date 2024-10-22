@@ -1,7 +1,7 @@
 package com.wavemaker.employee.service.impl;
 
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveRequest;
 import com.wavemaker.employee.pojo.dto.EmployeeLeaveRequestVO;
 import com.wavemaker.employee.repository.MyLeaveRepository;
@@ -26,7 +26,7 @@ public class MyLeaveServiceImpl implements MyLeaveService {
     private EmployeeLeaveSummaryService employeeLeaveSummaryService;
 
     @Override
-    public LeaveRequest applyForLeave(LeaveRequest leaveRequest) throws ServerUnavilableException, LeaveDaysExceededException {
+    public LeaveRequest applyForLeave(LeaveRequest leaveRequest) throws ServerUnavailableException, LeaveDaysExceededException {
         int totalDays = DateUtil.calculateTotalDaysExcludingWeekendsAndHolidays(leaveRequest.getFromDate(), leaveRequest.getToDate());
         int leaveTypeId = leaveRequest.getLeaveTypeId();
         boolean isSuccess = employeeLeaveSummaryService.isLeaveTypeWithinRange(leaveRequest.getEmpId(), leaveTypeId, totalDays);
@@ -38,27 +38,27 @@ public class MyLeaveServiceImpl implements MyLeaveService {
     }
 
     @Override
-    public boolean cancelMyLeaveRequest(int leaveRequestId, int approvingEmpId) throws ServerUnavilableException {
+    public boolean cancelMyLeaveRequest(int leaveRequestId, int approvingEmpId) throws ServerUnavailableException {
         return myLeaveRepository.cancelMyLeaveRequest(leaveRequestId, approvingEmpId);
     }
 
     @Override
-    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavilableException {
+    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavailableException {
         return myLeaveRepository.getMyLeaveRequests(empId, statusList);
     }
 
     @Override
-    public boolean updateMyLeaveRequest(LeaveRequest leaveRequest) throws ServerUnavilableException {
+    public boolean updateMyLeaveRequest(LeaveRequest leaveRequest) throws ServerUnavailableException {
         return myLeaveRepository.updateMyLeaveRequest(leaveRequest);
     }
 
     @Override
-    public int getEmployeeIdByLeaveRequestId(int leaveRequestId) throws ServerUnavilableException {
+    public int getEmployeeIdByLeaveRequestId(int leaveRequestId) throws ServerUnavailableException {
         return myLeaveRepository.getEmployeeIdByLeaveRequestId(leaveRequestId);
     }
 
     @Override
-    public List<Integer> getLeaveTypeIdAndTotalDaysByLeaveRequestId(int leaveRequestId) throws ServerUnavilableException {
+    public List<Integer> getLeaveTypeIdAndTotalDaysByLeaveRequestId(int leaveRequestId) throws ServerUnavailableException {
         return myLeaveRepository.getLeaveTypeIdAndTotalDaysByLeaveRequestId(leaveRequestId);
     }
 

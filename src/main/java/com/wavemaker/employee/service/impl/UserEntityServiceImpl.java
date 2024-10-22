@@ -1,7 +1,7 @@
 package com.wavemaker.employee.service.impl;
 
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserEntityRepository;
 import com.wavemaker.employee.repository.impl.UserEntityRepositoryImpl;
@@ -18,17 +18,17 @@ public class UserEntityServiceImpl implements UserEntityService {
     }
 
     @Override
-    public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavilableException {
+    public UserEntity authenticateUser(UserEntity userEntity) throws ServerUnavailableException {
         return userEntityRepository.authenticateUser(userEntity);
     }
 
     @Override
-    public UserEntity getUserEntityById(int userId) throws ServerUnavilableException {
+    public UserEntity getUserEntityById(int userId) throws ServerUnavailableException {
         return userEntityRepository.getUserEntityById(userId);
     }
 
     @Override
-    public UserEntity addUserEntity(UserEntity userEntity) throws ServerUnavilableException {
+    public UserEntity addUserEntity(UserEntity userEntity) throws ServerUnavailableException {
         return userEntityRepository.addUserEntity(userEntity);
     }
 

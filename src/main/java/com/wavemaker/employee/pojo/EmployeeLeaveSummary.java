@@ -7,7 +7,6 @@ public class EmployeeLeaveSummary {
     public int summaryId;
     public int empId;
     public int leaveTypeId;
-    public String leaveType;
     public int pendingLeaves;
     public int totalLeavesTaken;
     public Date lastUpdated;
@@ -34,14 +33,6 @@ public class EmployeeLeaveSummary {
 
     public void setLeaveTypeId(int leaveTypeId) {
         this.leaveTypeId = leaveTypeId;
-    }
-
-    public String getLeaveType() {
-        return leaveType;
-    }
-
-    public void setLeaveType(String leaveType) {
-        this.leaveType = leaveType;
     }
 
     public int getPendingLeaves() {
@@ -73,12 +64,12 @@ public class EmployeeLeaveSummary {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         EmployeeLeaveSummary that = (EmployeeLeaveSummary) object;
-        return summaryId == that.summaryId && empId == that.empId && leaveTypeId == that.leaveTypeId && pendingLeaves == that.pendingLeaves && totalLeavesTaken == that.totalLeavesTaken && Objects.equals(leaveType, that.leaveType) && Objects.equals(lastUpdated, that.lastUpdated);
+        return summaryId == that.summaryId && empId == that.empId && leaveTypeId == that.leaveTypeId && pendingLeaves == that.pendingLeaves && totalLeavesTaken == that.totalLeavesTaken && Objects.equals(lastUpdated, that.lastUpdated);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(summaryId, empId, leaveTypeId, leaveType, pendingLeaves, totalLeavesTaken, lastUpdated);
+        return Objects.hash(summaryId, empId, leaveTypeId, pendingLeaves, totalLeavesTaken, lastUpdated);
     }
 
     @Override
@@ -87,7 +78,6 @@ public class EmployeeLeaveSummary {
                 "summaryId=" + summaryId +
                 ", empId=" + empId +
                 ", leaveTypeId=" + leaveTypeId +
-                ", leaveType='" + leaveType + '\'' +
                 ", pendingLeaves=" + pendingLeaves +
                 ", totalLeavesTaken=" + totalLeavesTaken +
                 ", lastUpdated=" + lastUpdated +

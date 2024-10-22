@@ -1,7 +1,7 @@
 package com.wavemaker.employee.repository.impl;
 
 import com.wavemaker.employee.constants.LeaveRequestStatus;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveRequest;
 import com.wavemaker.employee.pojo.dto.EmployeeLeaveRequestVO;
 import com.wavemaker.employee.repository.MyLeaveRepository;
@@ -50,7 +50,7 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
     }
 
     @Override
-    public LeaveRequest applyForLeave(LeaveRequest leaveRequest) throws ServerUnavilableException {
+    public LeaveRequest applyForLeave(LeaveRequest leaveRequest) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_LEAVE_REQUEST_QUERY, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, leaveRequest.getEmpId());
@@ -74,13 +74,13 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unexpected exception", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unexpected exception", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return leaveRequest;
     }
 
     @Override
-    public boolean cancelMyLeaveRequest(int leaveRequestId, int empId) throws ServerUnavilableException {
+    public boolean cancelMyLeaveRequest(int leaveRequestId, int empId) throws ServerUnavailableException {
         String query = "UPDATE LEAVE_REQUEST "
                 + "SET LEAVE_STATUS = ?, DATE_OF_ACTION = ? "
                 + "WHERE LEAVE_REQUEST_ID = ? AND EMP_ID = ?";
@@ -96,13 +96,13 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to update leave request status.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to update leave request status.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
 
     @Override
-    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavilableException {
+    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavailableException {
         List<EmployeeLeaveRequestVO> leaveRequests = new ArrayList<>();
         String placeholders = String.join(",", Collections.nCopies(statusList.size(), "?"));
         String query = String.format(GET_LEAVE_REQUESTS_BY_MULTIPLE_STATUSES, placeholders);
@@ -128,14 +128,14 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to retrieve leave requests.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to retrieve leave requests.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
         return leaveRequests;
     }
 
     @Override
-    public boolean updateMyLeaveRequest(LeaveRequest leaveRequest) throws ServerUnavilableException {
+    public boolean updateMyLeaveRequest(LeaveRequest leaveRequest) throws ServerUnavailableException {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_LEAVE_REQUEST_SQL);
             preparedStatement.setInt(1, leaveRequest.getEmpId());
@@ -151,12 +151,12 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
             return rowsUpdated > 0;
 
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to Update leave requests.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to Update leave requests.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public int getEmployeeIdByLeaveRequestId(int leaveRequestId) throws ServerUnavilableException {
+    public int getEmployeeIdByLeaveRequestId(int leaveRequestId) throws ServerUnavailableException {
         int empId = -1;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -171,13 +171,13 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
                 empId = resultSet.getInt("EMP_ID");
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error fetching employee ID by leave request ID", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error fetching employee ID by leave request ID", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return empId;
     }
 
     @Override
-    public List<Integer> getLeaveTypeIdAndTotalDaysByLeaveRequestId(int leaveRequestId) throws ServerUnavilableException {
+    public List<Integer> getLeaveTypeIdAndTotalDaysByLeaveRequestId(int leaveRequestId) throws ServerUnavailableException {
         List<Integer> result = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_LEAVE_TYPE_ID_AND_TOTAL_DAYS_QUERY);
@@ -191,7 +191,7 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Error fetching leave type ID and total days", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Error fetching leave type ID and total days", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return result;
     }

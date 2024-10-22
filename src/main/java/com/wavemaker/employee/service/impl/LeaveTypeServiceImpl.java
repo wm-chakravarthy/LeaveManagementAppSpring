@@ -1,7 +1,7 @@
 package com.wavemaker.employee.service.impl;
 
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveType;
 import com.wavemaker.employee.repository.LeaveTypeRepository;
 import com.wavemaker.employee.service.LeaveTypeService;
@@ -19,12 +19,12 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
     private LeaveTypeRepository leaveTypeRepository;
 
     @Override
-    public List<LeaveType> getAllLeaveTypes(String gender) throws ServerUnavilableException {
+    public List<LeaveType> getAllLeaveTypes(String gender) throws ServerUnavailableException {
         return leaveTypeRepository.getAllLeaveTypes(gender);
     }
 
     @Override
-    public boolean isLeaveTypeWithInRange(int leaveTypeId, int totalDays) throws ServerUnavilableException, LeaveDaysExceededException {
+    public boolean isLeaveTypeWithInRange(int leaveTypeId, int totalDays) throws ServerUnavailableException, LeaveDaysExceededException {
         return leaveTypeRepository.isLeaveTypeWithInRange(leaveTypeId, totalDays);
     }
 }

@@ -1,6 +1,6 @@
 package com.wavemaker.employee.controller;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.service.EmployeeLeaveSummaryService;
@@ -27,14 +27,14 @@ public class EmployeeLeaveSummaryController {
 
 
     @GetMapping
-    public List<EmployeeLeaveSummary> getEmployeeLeaveSummaries(HttpServletRequest request, HttpServletResponse response) {
+    public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(HttpServletRequest request, HttpServletResponse response) {
         UserEntity userEntity = null;
         List<EmployeeLeaveSummary> employeeLeaveSummaryList = null;
         try {
             userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
             logger.info("Fetching leave summary for employee : {}", userEntity);
             employeeLeaveSummaryList = employeeLeaveSummaryService.getEmployeeLeaveSummariesById(userEntity.getEmpId());
-        } catch (ServerUnavilableException e) {
+        } catch (ServerUnavailableException e) {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
         } catch (Exception e) {
             logger.error("Server error occurred while processing GET request", e);

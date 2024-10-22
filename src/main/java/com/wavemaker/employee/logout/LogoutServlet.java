@@ -1,6 +1,6 @@
 package com.wavemaker.employee.logout;
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.service.UserCookieService;
 import com.wavemaker.employee.service.impl.UserCookieServiceImpl;
 import com.wavemaker.employee.util.CookieHandler;
@@ -25,7 +25,7 @@ public class LogoutServlet extends HttpServlet {
     }
 
     @PostMapping
-    public void logout(HttpServletRequest request, HttpServletResponse response) throws ServerUnavilableException {
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
         HttpSession session = request.getSession(false);
         String cookieName = "my_auth_cookie";
         String cookieValue = null;

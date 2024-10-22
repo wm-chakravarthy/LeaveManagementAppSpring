@@ -1,7 +1,7 @@
 package com.wavemaker.employee.repository.impl;
 
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveType;
 import com.wavemaker.employee.repository.LeaveTypeRepository;
 import com.wavemaker.employee.util.DBConnector;
@@ -35,7 +35,7 @@ public class LeaveTypeRepositoryImpl implements LeaveTypeRepository {
     }
 
     @Override
-    public List<LeaveType> getAllLeaveTypes(String gender) throws ServerUnavilableException {
+    public List<LeaveType> getAllLeaveTypes(String gender) throws ServerUnavailableException {
         List<LeaveType> leaveTypes = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_LEAVE_TYPE_QUERY)) {
@@ -55,13 +55,13 @@ public class LeaveTypeRepositoryImpl implements LeaveTypeRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Unable to retrieve leave type information", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Unable to retrieve leave type information", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return leaveTypes;
     }
 
     @Override
-    public boolean isLeaveTypeWithInRange(int leaveTypeId, int totalDays) throws ServerUnavilableException, LeaveDaysExceededException {
+    public boolean isLeaveTypeWithInRange(int leaveTypeId, int totalDays) throws ServerUnavailableException, LeaveDaysExceededException {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_MAX_DAYS_ALLOWED)) {
             preparedStatement.setInt(1, leaveTypeId);
@@ -75,7 +75,7 @@ public class LeaveTypeRepositoryImpl implements LeaveTypeRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new ServerUnavilableException("Failed to retrieve maximum allowed days for leave type.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new ServerUnavailableException("Failed to retrieve maximum allowed days for leave type.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 

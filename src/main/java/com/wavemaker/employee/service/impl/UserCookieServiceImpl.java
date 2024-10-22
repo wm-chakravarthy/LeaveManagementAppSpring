@@ -1,7 +1,7 @@
 package com.wavemaker.employee.service.impl;
 
 
-import com.wavemaker.employee.exception.ServerUnavilableException;
+import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserCookieRepository;
 import com.wavemaker.employee.repository.impl.UserCookieRepositoryImpl;
@@ -24,12 +24,12 @@ public class UserCookieServiceImpl implements UserCookieService {
 
 
     @Override
-    public boolean addCookie(String cookieValue, int userId) throws ServerUnavilableException {
+    public boolean addCookie(String cookieValue, int userId) throws ServerUnavailableException {
         return userCookieRepository.addCookie(cookieValue, userId);
     }
 
     @Override
-    public UserEntity getUserEntityByCookieValue(String cookieValue) throws ServerUnavilableException {
+    public UserEntity getUserEntityByCookieValue(String cookieValue) throws ServerUnavailableException {
         int userId = userCookieRepository.getUserIdByCookieValue(cookieValue);
         if (userId != -1) {
             return userEntityService.getUserEntityById(userId);
@@ -38,7 +38,7 @@ public class UserCookieServiceImpl implements UserCookieService {
     }
 
     @Override
-    public boolean deleteUserCookie(String cookieValue) throws ServerUnavilableException {
+    public boolean deleteUserCookie(String cookieValue) throws ServerUnavailableException {
         return userCookieRepository.deleteUserCookie(cookieValue);
     }
 }
