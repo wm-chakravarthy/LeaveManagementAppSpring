@@ -1,11 +1,10 @@
 package com.wavemaker.employee.exception;
 
-public class ErrorResponse extends RuntimeException {
+public class ErrorResponse {
     private int statusCode;
     private String errorMessage;
 
     public ErrorResponse(String errorMessage, int statusCode) {
-        super(errorMessage);
         this.errorMessage = errorMessage;
         this.statusCode = statusCode;
     }

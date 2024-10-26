@@ -7,9 +7,11 @@ import com.wavemaker.employee.repository.UserCookieRepository;
 import com.wavemaker.employee.repository.impl.UserCookieRepositoryImpl;
 import com.wavemaker.employee.service.UserCookieService;
 import com.wavemaker.employee.service.UserEntityService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class UserCookieServiceImpl implements UserCookieService {
 
     private UserEntityService userEntityService;

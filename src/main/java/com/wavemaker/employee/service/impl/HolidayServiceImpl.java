@@ -4,6 +4,7 @@ import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.Holiday;
 import com.wavemaker.employee.repository.HolidayRepository;
 import com.wavemaker.employee.service.HolidayService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class HolidayServiceImpl implements HolidayService {
 
     @Autowired

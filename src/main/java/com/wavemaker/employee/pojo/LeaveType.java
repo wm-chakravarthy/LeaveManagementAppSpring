@@ -1,10 +1,26 @@
 package com.wavemaker.employee.pojo;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "LEAVE_TYPE")
 public class LeaveType {
+
+    @Id
+    @Column(name = "LEAVE_TYPE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int leaveTypeId;
+
+    @Column(name = "LEAVE_TYPE")
     private String leaveType;
+
+    @Column(name = "DESCRIPTION")
     private String description;
+
+    @Column(name = "MAX_LEAVE_DAYS_ALLOWED")
     private int maxNoOfLeaves;
+
+    @Column(name = "APPLICABLE_GENDER")
     private String applicableForGender;
 
     public int getLeaveTypeId() {

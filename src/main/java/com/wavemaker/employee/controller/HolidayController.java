@@ -27,7 +27,7 @@ public class HolidayController {
     @GetMapping
     public Holiday getHolidayById(
             @RequestParam(value = "holidayId", required = false) String holidayId,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
+            HttpServletRequest request, HttpServletResponse response) {
 
         logger.info("Fetching holiday details for holidayId: {}", holidayId);
         Holiday holiday = null;

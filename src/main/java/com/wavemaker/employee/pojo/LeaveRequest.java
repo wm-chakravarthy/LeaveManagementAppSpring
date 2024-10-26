@@ -1,21 +1,76 @@
 package com.wavemaker.employee.pojo;
 
 import com.wavemaker.employee.constants.LeaveRequestStatus;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "LEAVE_REQUEST")
 public class LeaveRequest {
+
+    @Id
+    @Column(name = "LEAVE_REQUEST_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int leaveRequestId;
+
+    @Column(name = "EMP_ID")
     private int empId;
+
+    @Column(name = "LEAVE_TYPE_ID")
     private int leaveTypeId;
+
+    @Column(name = "LEAVE_REASON")
     private String leaveReason;
+
+    @Column(name = "FROM_DATE")
     private Date fromDate;
+
+    @Column(name = "TO_DATE")
     private Date toDate;
+
+    @Column(name = "DATE_OF_APPLICATION")
     private Date dateOfApplication;
+
+    @Column(name = "TOTAL_DAYS")
     private int totalNoOfDays;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "LEAVE_STATUS")
     private LeaveRequestStatus leaveRequestStatus;
+
+    @Column(name = "DATE_OF_ACTION")
     private Date dateOfApproved;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LEAVE_TYPE_ID", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private LeaveType leaveType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "EMP_ID", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private Employee employeeByEmpId;
+
+    public LeaveType getLeaveType() {
+        return leaveType;
+    }
+
+
+    public void setLeaveType(LeaveType leaveType) {
+        this.leaveType = leaveType;
+    }
+
+    public Employee getEmployeeByEmpId() {
+        return employeeByEmpId;
+    }
+
+    public void setEmployeeByEmpId(Employee employeeByEmpId) {
+        this.employeeByEmpId = employeeByEmpId;
+    }
 
     public int getLeaveRequestId() {
         return leaveRequestId;
@@ -106,7 +161,7 @@ public class LeaveRequest {
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object) {//
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         LeaveRequest that = (LeaveRequest) object;

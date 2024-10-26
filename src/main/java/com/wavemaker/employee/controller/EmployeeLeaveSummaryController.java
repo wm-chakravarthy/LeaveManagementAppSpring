@@ -27,7 +27,7 @@ public class EmployeeLeaveSummaryController {
 
 
     @GetMapping
-    public List<EmployeeLeaveSummary> getEmployeeLeaveSummariesById(HttpServletRequest request, HttpServletResponse response) {
+    public List<EmployeeLeaveSummary> getLoggedInEmployeeLeaveSummaries(HttpServletRequest request, HttpServletResponse response) {
         UserEntity userEntity = null;
         List<EmployeeLeaveSummary> employeeLeaveSummaryList = null;
         try {
@@ -38,9 +38,6 @@ public class EmployeeLeaveSummaryController {
             logger.error("Error fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown", e);
         } catch (Exception e) {
             logger.error("Server error occurred while processing GET request", e);
-        } finally {
-            userEntity = null;
-            employeeLeaveSummaryList = null;
         }
         return employeeLeaveSummaryList;
     }

@@ -1,15 +1,61 @@
 package com.wavemaker.employee.pojo;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "EMPLOYEE_LEAVE_SUMMARY")
 public class EmployeeLeaveSummary {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "SUMMARY_ID")
     public int summaryId;
+
+    @Column(name = "EMP_ID")
     public int empId;
+
+    @Column(name = "LEAVE_TYPE_ID")
     public int leaveTypeId;
+
+    @Column(name = "PENDING_LEAVES")
     public int pendingLeaves;
+
+    @Column(name = "TOTAL_LEAVES_TAKEN")
     public int totalLeavesTaken;
+
+    @Column(name = "LAST_UPDATED")
     public Date lastUpdated;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "EMP_ID", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private Employee employee;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LEAVE_TYPE_ID", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private LeaveType leaveTypeByLeaveTypeId;
+
+    public LeaveType getLeaveTypeByLeaveTypeId() {
+        return leaveTypeByLeaveTypeId;
+    }
+
+    public void setLeaveTypeByLeaveTypeId(LeaveType leaveTypeByLeaveTypeId) {
+        this.leaveTypeByLeaveTypeId = leaveTypeByLeaveTypeId;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
     public int getSummaryId() {
         return summaryId;

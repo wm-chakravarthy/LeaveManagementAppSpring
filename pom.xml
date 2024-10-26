@@ -15,17 +15,18 @@
           <version>6.1.0</version>
           <scope>provided</scope>
       </dependency>
-
-      <dependency>
-          <groupId>com.mysql</groupId>
-          <artifactId>mysql-connector-j</artifactId>
-          <version>9.0.0</version>
-      </dependency>
       <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
       <dependency>
           <groupId>com.google.code.gson</groupId>
           <artifactId>gson</artifactId>
           <version>2.11.0</version>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+      <dependency>
+          <groupId>com.zaxxer</groupId>
+          <artifactId>HikariCP</artifactId>
+          <version>6.0.0</version>
       </dependency>
 
       <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
@@ -34,7 +35,12 @@
           <artifactId>spring-core</artifactId>
           <version>6.1.13</version>
       </dependency>
-
+      <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+      <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>8.0.33</version>
+      </dependency>
       <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
       <dependency>
           <groupId>org.springframework</groupId>
@@ -108,8 +114,23 @@
           <version>2.18.0</version>
           <type>pom</type>
       </dependency>
+      <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core-jakarta -->
+      <dependency>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-core-jakarta</artifactId>
+          <version>5.6.15.Final</version>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-orm</artifactId>
+          <version>6.1.14</version>
+      </dependency>
+      <!--log dependencies end -->
   </dependencies>
   <build>
-    <finalName>LeaveManagementAppSpring</finalName>
+    <finalName>LeaveManagementAppSpring</finalName><plugins><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target></configuration></plugin></plugins>
   </build>
 </project>

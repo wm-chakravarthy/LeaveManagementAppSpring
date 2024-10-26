@@ -1,6 +1,7 @@
 package com.wavemaker.employee.repository.impl;
 
 import com.wavemaker.employee.exception.ServerUnavailableException;
+import com.wavemaker.employee.pojo.Employee;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
 import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
 import com.wavemaker.employee.repository.EmployeeLeaveSummaryRepository;
@@ -111,7 +112,7 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
     }
 
     @Override
-    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(int managerId) throws ServerUnavailableException {
+    public Map<Employee, List<EmployeeLeaveSummary>> getMyTeamEmployeeLeaveSummaries(int managerId) throws ServerUnavailableException {
         try {
             PreparedStatement employeesStatement = connection.prepareStatement(EMPLOYEES_QUERY);
             employeesStatement.setInt(1, managerId);
@@ -146,7 +147,8 @@ public class EmployeeLeaveSummaryRepositoryImpl implements EmployeeLeaveSummaryR
                 resultMap.put(empVO, summaries);
             }
 
-            return resultMap;
+//            return resultMap;
+            return null;
         } catch (SQLException e) {
             throw new ServerUnavailableException("Error fetching all employee leave summaries", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

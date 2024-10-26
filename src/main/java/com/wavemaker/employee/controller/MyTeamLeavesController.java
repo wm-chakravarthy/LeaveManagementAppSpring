@@ -1,10 +1,8 @@
 package com.wavemaker.employee.controller;
 
 import com.wavemaker.employee.constants.LeaveRequestStatus;
-import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavailableException;
+import com.wavemaker.employee.pojo.LeaveRequest;
 import com.wavemaker.employee.pojo.UserEntity;
-import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
 import com.wavemaker.employee.service.MyTeamLeaveService;
 import com.wavemaker.employee.util.UserSessionHandler;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,11 +26,11 @@ public class MyTeamLeavesController {
     private MyTeamLeaveService myTeamLeaveService;
 
     @GetMapping
-    public List<LeaveRequestVO> getMyTeamLeaveRequests(
+    public List<LeaveRequest> getMyTeamLeaveRequests(
             @RequestParam(value = "status", required = false) String statusParam,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
+            HttpServletRequest request, HttpServletResponse response) {
 
-        List<LeaveRequestVO> leaveRequestList = null;
+        List<LeaveRequest> leaveRequestList = null;
         UserEntity userEntity = null;
         List<String> statusList = new ArrayList<>();
         if (statusParam != null && !statusParam.isEmpty()) {
@@ -54,7 +52,7 @@ public class MyTeamLeavesController {
     public boolean approveOrRejectTeamLeaveRequest(
             @RequestParam(value = "leaveRequestId", required = false) String leaveRequestId,
             @RequestParam(value = "approveOrReject", required = false) String approveOrReject,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException, LeaveDaysExceededException {
+            HttpServletRequest request, HttpServletResponse response) {
 
         boolean isSuccess = false;
         UserEntity userEntity = null;

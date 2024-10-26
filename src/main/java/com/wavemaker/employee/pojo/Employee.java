@@ -1,17 +1,56 @@
 package com.wavemaker.employee.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "EMPLOYEE")
 public class Employee {
-    private int empId;
-    private int managerId;
+
+    @Id
+    @Column(name = "EMP_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer empId;
+
+    @Column(name = "MANAGER_ID")
+    private Integer managerId;
+
+    @Column(name = "NAME")
     private String empName;
+
+    @Column(name = "DOB")
     private Date empDateOfBirth;
-    private long phoneNumber;
+
+    @Column(name = "PHONE_NUMBER")
+    private Long phoneNumber;
+
+    @Column(name = "EMAIL")
     private String email;
+
+    @Column(name = "GENDER")
     private String gender;
+
+    @Column(name = "ROLE")
     private String role;
+
+    @JsonIgnoreProperties("employeeByManagerId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "MANAGER_ID", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private Employee employeeByManagerId;
+
+    public Employee getEmployeeByManagerId() {
+        return employeeByManagerId;
+    }
+
+    public void setEmployeeByManagerId(Employee employeeByManagerId) {
+        this.employeeByManagerId = employeeByManagerId;
+    }
 
     public int getEmpId() {
         return empId;

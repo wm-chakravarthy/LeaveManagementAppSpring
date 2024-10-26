@@ -1,12 +1,26 @@
 package com.wavemaker.employee.pojo;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "HOLIDAYS")
 public class Holiday {
+
+    @Id
+    @Column(name = "HOLIDAY_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int holidayId;
+
+    @Column(name = "NAME")
     private String holidayName;
+
+    @Column(name = "HOLIDAY_DATE")
     private Date holidayDate;
+
+    @Column(name = "DESCRIPTION")
     private String description;
 
     public int getHolidayId() {

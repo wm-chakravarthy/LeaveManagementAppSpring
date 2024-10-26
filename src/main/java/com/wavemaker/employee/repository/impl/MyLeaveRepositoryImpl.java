@@ -7,14 +7,14 @@ import com.wavemaker.employee.pojo.dto.EmployeeLeaveRequestVO;
 import com.wavemaker.employee.repository.MyLeaveRepository;
 import com.wavemaker.employee.util.DBConnector;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Repository("myLeaveRepositoryInDB")
+//@Repository("myLeaveRepositoryInDB")
 public class MyLeaveRepositoryImpl implements MyLeaveRepository {
 
     private static final String INSERT_LEAVE_REQUEST_QUERY = "INSERT INTO LEAVE_REQUEST" +
@@ -102,7 +102,8 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
 
 
     @Override
-    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavailableException {
+    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<LeaveRequestStatus> statusList) throws ServerUnavailableException {
+        List<String> statusListStr = statusList.stream().map(Enum::name).collect(Collectors.toList());
         List<EmployeeLeaveRequestVO> leaveRequests = new ArrayList<>();
         String placeholders = String.join(",", Collections.nCopies(statusList.size(), "?"));
         String query = String.format(GET_LEAVE_REQUESTS_BY_MULTIPLE_STATUSES, placeholders);
@@ -110,7 +111,7 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, empId);
             for (int i = 0; i < statusList.size(); i++) {
-                preparedStatement.setString(i + 2, statusList.get(i)); // Index starts from 2 as 1 is for empId
+                preparedStatement.setString(i + 2, statusListStr.get(i)); // Index starts from 2 as 1 is for empId
             }
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
@@ -132,6 +133,11 @@ public class MyLeaveRepositoryImpl implements MyLeaveRepository {
         }
 
         return leaveRequests;
+    }
+
+    @Override
+    public LeaveRequest getMyLeaveRequest(int leaveRequestId) throws ServerUnavailableException {
+        return null;  //implemented this method in hibernate
     }
 
     @Override

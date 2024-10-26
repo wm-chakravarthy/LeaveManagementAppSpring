@@ -6,9 +6,11 @@ import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.repository.UserEntityRepository;
 import com.wavemaker.employee.repository.impl.UserEntityRepositoryImpl;
 import com.wavemaker.employee.service.UserEntityService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class UserEntityServiceImpl implements UserEntityService {
 
     private UserEntityRepository userEntityRepository;

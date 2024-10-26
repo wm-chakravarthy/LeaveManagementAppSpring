@@ -1,5 +1,6 @@
 package com.wavemaker.employee.service.impl;
 
+import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
 import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveRequest;
@@ -9,6 +10,7 @@ import com.wavemaker.employee.service.EmployeeLeaveSummaryService;
 import com.wavemaker.employee.service.MyLeaveService;
 import com.wavemaker.employee.util.DateUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
 public class MyLeaveServiceImpl implements MyLeaveService {
 
     @Autowired
-    @Qualifier("myLeaveRepositoryInDB")
+    @Qualifier("myLeaveRepositoryImplInHDS")
     private MyLeaveRepository myLeaveRepository;
 
     @Autowired
@@ -34,6 +37,7 @@ public class MyLeaveServiceImpl implements MyLeaveService {
             throw new LeaveDaysExceededException("Total days exceed the maximum allowed for this leave type.", HttpServletResponse.SC_BAD_REQUEST);
         }
         leaveRequest.setTotalNoOfDays(totalDays);
+        employeeLeaveSummaryService.updateEmployeeLeaveSummary(leaveRequest.getEmpId(), leaveTypeId, totalDays);
         return myLeaveRepository.applyForLeave(leaveRequest);
     }
 
@@ -43,12 +47,25 @@ public class MyLeaveServiceImpl implements MyLeaveService {
     }
 
     @Override
-    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavailableException {
+    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<LeaveRequestStatus> statusList) throws ServerUnavailableException {
         return myLeaveRepository.getMyLeaveRequests(empId, statusList);
     }
 
     @Override
+    public LeaveRequest getMyLeaveRequest(int leaveRequestId) throws ServerUnavailableException {
+        return myLeaveRepository.getMyLeaveRequest(leaveRequestId);
+    }
+
+    @Override
     public boolean updateMyLeaveRequest(LeaveRequest leaveRequest) throws ServerUnavailableException {
+        int totalDays = DateUtil.calculateTotalDaysExcludingWeekendsAndHolidays(leaveRequest.getFromDate(), leaveRequest.getToDate());
+        int leaveTypeId = leaveRequest.getLeaveTypeId();
+        boolean isSuccess = employeeLeaveSummaryService.isLeaveTypeWithinRange(leaveRequest.getEmpId(), leaveTypeId, totalDays);
+        if (!isSuccess) {
+            throw new LeaveDaysExceededException("Total days exceed the maximum allowed for this leave type.", HttpServletResponse.SC_BAD_REQUEST);
+        }
+        leaveRequest.setTotalNoOfDays(totalDays);
+        employeeLeaveSummaryService.updateEmployeeLeaveSummary(leaveRequest.getEmpId(), leaveTypeId, totalDays);
         return myLeaveRepository.updateMyLeaveRequest(leaveRequest);
     }
 

@@ -2,10 +2,11 @@ package com.wavemaker.employee.service.impl;
 
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
 import com.wavemaker.employee.exception.ServerUnavailableException;
+import com.wavemaker.employee.pojo.Employee;
 import com.wavemaker.employee.pojo.EmployeeLeaveSummary;
-import com.wavemaker.employee.pojo.dto.EmployeeIdNameVO;
 import com.wavemaker.employee.repository.EmployeeLeaveSummaryRepository;
 import com.wavemaker.employee.service.EmployeeLeaveSummaryService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class EmployeeLeaveSummaryServiceImpl implements EmployeeLeaveSummaryService {
 
     @Autowired
-    @Qualifier("employeeLeaveSummaryRepositoryInDB")
+    @Qualifier("employeeLeaveSummaryRepositoryInHDS")
     private EmployeeLeaveSummaryRepository employeeLeaveSummaryRepository;
 
     @Override
@@ -31,8 +33,8 @@ public class EmployeeLeaveSummaryServiceImpl implements EmployeeLeaveSummaryServ
     }
 
     @Override
-    public Map<EmployeeIdNameVO, List<EmployeeLeaveSummary>> getAllEmployeesLeaveSummary(int empId) throws ServerUnavailableException {
-        return employeeLeaveSummaryRepository.getAllEmployeesLeaveSummary(empId);
+    public Map<Employee, List<EmployeeLeaveSummary>> getMyTeamEmployeeLeaveSummaries(int empId) throws ServerUnavailableException {
+        return employeeLeaveSummaryRepository.getMyTeamEmployeeLeaveSummaries(empId);
     }
 
     @Override

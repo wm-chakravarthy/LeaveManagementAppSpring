@@ -2,6 +2,7 @@ package com.wavemaker.employee.repository.impl;
 
 import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.ServerUnavailableException;
+import com.wavemaker.employee.pojo.LeaveRequest;
 import com.wavemaker.employee.pojo.dto.LeaveRequestVO;
 import com.wavemaker.employee.repository.MyTeamLeaveRepository;
 import com.wavemaker.employee.util.DBConnector;
@@ -50,7 +51,7 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
     }
 
     @Override
-    public List<LeaveRequestVO> getMyTeamLeaveRequests(int empId, List<String> statusList) throws ServerUnavailableException {
+    public List<LeaveRequest> getMyTeamLeaveRequests(int empId, List<String> statusList) throws ServerUnavailableException {
         List<LeaveRequestVO> leaveRequestVOList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder(GET_TEAM_LEAVE_REQUESTS);
 
@@ -93,7 +94,7 @@ public class MyTeamLeaveRepositoryImpl implements MyTeamLeaveRepository {
             throw new ServerUnavailableException("Unable to retrieve leave requests for team members.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        return leaveRequestVOList;
+        return null; //this should return LEAVE_REQUESTS_VO
     }
 
     @Override

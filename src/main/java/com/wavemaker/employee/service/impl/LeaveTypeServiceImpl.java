@@ -5,6 +5,7 @@ import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveType;
 import com.wavemaker.employee.repository.LeaveTypeRepository;
 import com.wavemaker.employee.service.LeaveTypeService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Transactional
 public class LeaveTypeServiceImpl implements LeaveTypeService {
 
     @Autowired
-    @Qualifier("leaveTypeRepositoryInDB")
+    @Qualifier("leaveTypeRepositoryInHDS")
     private LeaveTypeRepository leaveTypeRepository;
 
     @Override

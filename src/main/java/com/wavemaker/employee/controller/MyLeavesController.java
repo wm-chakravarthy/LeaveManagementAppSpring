@@ -1,7 +1,6 @@
 package com.wavemaker.employee.controller;
 
-import com.wavemaker.employee.exception.LeaveDaysExceededException;
-import com.wavemaker.employee.exception.ServerUnavailableException;
+import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.pojo.LeaveRequest;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.pojo.dto.EmployeeLeaveRequestVO;
@@ -30,11 +29,12 @@ public class MyLeavesController {
     @GetMapping
     public List<EmployeeLeaveRequestVO> getMyLeaveRequests(
             @RequestParam(value = "status", required = false) String status,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
+            HttpServletRequest request, HttpServletResponse response) {
 
         List<EmployeeLeaveRequestVO> employeeLeaveRequestVOList = null;
         UserEntity userEntity = null;
         List<String> statusList = new ArrayList<>();
+        List<LeaveRequestStatus> leaveRequestStatuses = new ArrayList<>();
         if (status != null && !status.isEmpty()) {
             statusList = Arrays.asList(status.split(","));
         } else {
@@ -43,9 +43,12 @@ public class MyLeavesController {
             statusList.add("PENDING");
             statusList.add("CANCELLED");
         }
+        for (String statusParam : statusList) {
+            leaveRequestStatuses.add(LeaveRequestStatus.valueOf(statusParam));
+        }
         logger.info("Fetching Leave details for user ID: {}", userEntity != null ? userEntity.getUserId() : "Unknown");
         userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
-        employeeLeaveRequestVOList = myLeaveService.getMyLeaveRequests(userEntity.getEmpId(), statusList);
+        employeeLeaveRequestVOList = myLeaveService.getMyLeaveRequests(userEntity.getEmpId(), leaveRequestStatuses);
         logger.info("Leave details fetched: {}", employeeLeaveRequestVOList);
         return employeeLeaveRequestVOList;
     }
@@ -53,7 +56,7 @@ public class MyLeavesController {
     @PatchMapping
     public boolean cancelMyLeaveRequest(
             @RequestParam(value = "leaveRequestId", required = false) String leaveRequestId,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
+            HttpServletRequest request, HttpServletResponse response) {
 
         LeaveRequest leaveRequest = null;
         UserEntity userEntity = null;
@@ -70,8 +73,7 @@ public class MyLeavesController {
 
     @PostMapping
     public LeaveRequest applyForLeave(@RequestBody LeaveRequest leaveRequest,
-                                      HttpServletRequest request, HttpServletResponse response)
-            throws ServerUnavailableException, LeaveDaysExceededException {
+                                      HttpServletRequest request, HttpServletResponse response) {
 
         UserEntity userEntity = null;
         userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);
@@ -85,8 +87,7 @@ public class MyLeavesController {
 
     @PutMapping
     public LeaveRequest updateMyLeaveRequest(@RequestBody LeaveRequest leaveRequest,
-                                             HttpServletRequest request, HttpServletResponse response)
-            throws ServerUnavailableException {
+                                             HttpServletRequest request, HttpServletResponse response) {
 
         UserEntity userEntity = null;
         userEntity = UserSessionHandler.handleUserSessionAndReturnUserEntity(request, response, logger);

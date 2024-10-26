@@ -1,5 +1,6 @@
 package com.wavemaker.employee.service;
 
+import com.wavemaker.employee.constants.LeaveRequestStatus;
 import com.wavemaker.employee.exception.LeaveDaysExceededException;
 import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.LeaveRequest;
@@ -13,7 +14,9 @@ public interface MyLeaveService {
 
     public boolean cancelMyLeaveRequest(int leaveRequestId, int approvingEmpId) throws ServerUnavailableException;
 
-    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<String> statusList) throws ServerUnavailableException;
+    public List<EmployeeLeaveRequestVO> getMyLeaveRequests(int empId, List<LeaveRequestStatus> leaveRequestStatus) throws ServerUnavailableException;
+
+    public LeaveRequest getMyLeaveRequest(int leaveRequestId) throws ServerUnavailableException;
 
     public boolean updateMyLeaveRequest(LeaveRequest leaveRequest) throws ServerUnavailableException;
 

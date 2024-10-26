@@ -1,6 +1,5 @@
 package com.wavemaker.employee.controller;
 
-import com.wavemaker.employee.exception.ServerUnavailableException;
 import com.wavemaker.employee.pojo.Employee;
 import com.wavemaker.employee.pojo.UserEntity;
 import com.wavemaker.employee.pojo.dto.EmployeeVO;
@@ -30,7 +29,7 @@ public class EmployeeController {
     @GetMapping
     public EmployeeVO getEmployeeById(
             @RequestParam(value = "empId", required = false) String empId,
-            HttpServletRequest request, HttpServletResponse response) throws ServerUnavailableException {
+            HttpServletRequest request, HttpServletResponse response) {
         EmployeeVO employee = null;
         UserEntity userEntity = null;
         if (empId != null) {
@@ -45,7 +44,7 @@ public class EmployeeController {
     @GetMapping("/list")
     public List<Employee> getEmployees(
             @RequestParam(value = "action", required = false) String action,
-            HttpServletRequest httpServletRequest, HttpServletResponse response) throws ServerUnavailableException {
+            HttpServletRequest httpServletRequest, HttpServletResponse response) {
         List<Employee> employeeList = null;
         if (action != null && action.equals("getManagers")) {
             logger.info("Fetching all managers");
