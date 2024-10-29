@@ -23,10 +23,10 @@ public class EmployeeLeaveSummary {
     public int leaveTypeId;
 
     @Column(name = "PENDING_LEAVES")
-    public int pendingLeaves;
+    public Integer pendingLeaves;
 
     @Column(name = "TOTAL_LEAVES_TAKEN")
-    public int totalLeavesTaken;
+    public Integer totalLeavesTaken;
 
     @Column(name = "LAST_UPDATED")
     public Date lastUpdated;

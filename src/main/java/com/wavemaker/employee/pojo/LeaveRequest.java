@@ -1,5 +1,6 @@
 package com.wavemaker.employee.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wavemaker.employee.constants.LeaveRequestStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -34,7 +35,7 @@ public class LeaveRequest {
 
     @Column(name = "DATE_OF_APPLICATION")
     private Date dateOfApplication;
-
+    @JsonIgnore
     @Column(name = "TOTAL_DAYS")
     private int totalNoOfDays;
 

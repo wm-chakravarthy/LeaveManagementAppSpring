@@ -6,7 +6,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "EMPLOYEE")
@@ -52,19 +51,19 @@ public class Employee {
         this.employeeByManagerId = employeeByManagerId;
     }
 
-    public int getEmpId() {
+    public Integer getEmpId() {
         return empId;
     }
 
-    public void setEmpId(int empId) {
+    public void setEmpId(Integer empId) {
         this.empId = empId;
     }
 
-    public int getManagerId() {
+    public Integer getManagerId() {
         return managerId;
     }
 
-    public void setManagerId(int managerId) {
+    public void setManagerId(Integer managerId) {
         this.managerId = managerId;
     }
 
@@ -76,20 +75,20 @@ public class Employee {
         this.empName = empName;
     }
 
-    public long getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(long phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public Date getEmpDateOfBirth() {
         return empDateOfBirth;
     }
 
     public void setEmpDateOfBirth(Date empDateOfBirth) {
         this.empDateOfBirth = empDateOfBirth;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -114,32 +113,5 @@ public class Employee {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Employee employee = (Employee) object;
-        return empId == employee.empId && managerId == employee.managerId && phoneNumber == employee.phoneNumber && Objects.equals(empName, employee.empName) && Objects.equals(empDateOfBirth, employee.empDateOfBirth) && Objects.equals(email, employee.email) && Objects.equals(gender, employee.gender) && Objects.equals(role, employee.role);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(empId, managerId, empName, empDateOfBirth, phoneNumber, email, gender, role);
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "empId=" + empId +
-                ", managerId=" + managerId +
-                ", empName='" + empName + '\'' +
-                ", empDateOfBirth=" + empDateOfBirth +
-                ", phoneNumber=" + phoneNumber +
-                ", email='" + email + '\'' +
-                ", gender='" + gender + '\'' +
-                ", role='" + role + '\'' +
-                '}';
     }
 }
