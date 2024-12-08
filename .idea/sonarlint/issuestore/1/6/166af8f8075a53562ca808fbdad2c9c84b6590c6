@@ -1,7 +1,7 @@
 
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Ë‡þ³·2J$2b775f36-7823-430c-83cc-cb505d25d361
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ8Ë‡þ³·2J$915688d1-a530-4efe-89bb-3f5f8c58f874
 
-java:S1854%">Remove this useless assignment to local variable "userEntity".(ÕŠ¼‚8Ï‡þ³·2J$85706512-aaff-4439-a844-70ed7d253ec7
+java:S1854&">Remove this useless assignment to local variable "userEntity".(ÕŠ¼‚8Ï‡þ³·2J$9f9b657d-36d1-4d50-a792-cb49ae5351e6
 r
-java:S1481#"/Remove this unused "userEntity" local variable.(åïÿ¸8Ð‡þ³·2J$350a7017-a5aa-4ab5-baef-c1688a92f4d4
+java:S1481$"/Remove this unused "userEntity" local variable.(åïÿ¸8Ð‡þ³·2J$73ecd9d4-8b4f-49db-beb5-974b058a92d2
