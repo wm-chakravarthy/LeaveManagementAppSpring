@@ -1,10 +1,2 @@
 
-X
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ
-X
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄÞ
-X
-java:S6813!"BRemove this field injection and use constructor injection instead.(êæÄÞ
-‚
-java:S1130&"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(²Ýµ²
 V	java:S125-"<This block of commented-out lines of code should be removed.(ç¿²ÿÿÿÿÿ
