@@ -1,8 +1,6 @@
 
 r
-java:S1481	"*Remove this unused "dummy" local variable.(ËĞŸŞùÿÿÿÿ8åáËã¹2J$c40da10d-4669-42c2-8804-708f3cbf18c2
+java:S1481"*Remove this unused "dummy" local variable.(ËĞŸŞùÿÿÿÿ8åáËã¹2J$58aaef3f-b2ba-4625-a14c-fcaeff35aedf
 h
-java:S3457
-"%String contains no format specifiers.(ºÖó8çáËã¹2J$13531f16-e8aa-4493-9f4a-fb039d906196
-m	java:S106
-"+Replace this use of System.out by a logger.(ºÖó8èáËã¹2J$427dc583-46d2-40fb-bc10-d09609105aac
+java:S3457"%String contains no format specifiers.(ºÖó8çáËã¹2J$f9f130f5-ae4c-470e-938d-4b8000d754b9
+m	java:S106"+Replace this use of System.out by a logger.(ºÖó8èáËã¹2J$35d1dca0-d5bf-4d8a-8196-1b88407c87df
