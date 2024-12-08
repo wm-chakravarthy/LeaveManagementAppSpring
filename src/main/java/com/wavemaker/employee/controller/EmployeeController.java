@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 //this is tempB
-//this is the commit from tempB branch 1
+//this is the commit from tempB branch
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
